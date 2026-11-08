@@ -4,10 +4,10 @@ import { equiposApi } from "@/lib/equipos-api";
 import { obtenerSesion } from "@/app/actions/session";
 import { getSession } from "@/lib/session";
 import { GET } from "@/app/api/fotos/jugadores/[archivo]/route";
-import { agregarJugador } from "@/app/actions/equipos";
-const fetchMock = vi.fn();
+import { agregarJugador, validarEquipo } from "@/app/actions/equipos";
 vi.mock("@/app/actions/session", () => ({ obtenerSesion: vi.fn() }));
 vi.mock("@/lib/session", () => ({ getSession: vi.fn() }));
+const fetchMock = vi.fn();
 beforeEach(() => {
   vi.resetAllMocks();
   vi.stubEnv("API_URL", "http://api.test/api/v1");
@@ -52,6 +52,46 @@ describe("Acceso al backend", () => {
     expect(await agregarJugador(3, form)).toMatchObject({ ok: true });
     expect(fetchMock.mock.calls[0][1].headers.has("Content-Type")).toBe(false);
     expect(fetchMock.mock.calls[0][1].body.get("foto")).toBeInstanceOf(File);
+  });
+  it("valida el motivo también en servidor", async () => {
+    expect(await validarEquipo(1, "RECHAZAR", "   corto  ")).toMatchObject({
+      ok: false,
+      status: 400,
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it("traduce la respuesta real de temporada completa", async () => {
+    fetchMock.mockResolvedValue(
+      Response.json(
+        {
+          codigo: "TEMPORADA_COMPLETA",
+          mensaje: "La temporada está completa.",
+        },
+        { status: 422 },
+      ),
+    );
+    expect(await equiposApi("JUGADOR", "equipos")).toMatchObject({
+      ok: false,
+      status: 422,
+      error: "La temporada está completa.",
+    });
+  });
+  it("muestra los requisitos cuando el backend devuelve fallas sin message", async () => {
+    fetchMock.mockResolvedValue(
+      Response.json(
+        {
+          codigo: "REQUISITOS_NO_CUMPLIDOS",
+          fallas: ["El equipo debe tener al menos 7 jugadores."],
+        },
+        { status: 422 },
+      ),
+    );
+    expect(await equiposApi("JUGADOR", "equipos")).toMatchObject({
+      ok: false,
+      status: 422,
+      error: "El equipo no cumple los requisitos de inscripción.",
+      fallas: ["El equipo debe tener al menos 7 jugadores."],
+    });
   });
   it("conserva el mensaje de jugador duplicado", async () => {
     fetchMock.mockResolvedValue(
