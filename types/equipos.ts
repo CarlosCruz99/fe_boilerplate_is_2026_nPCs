@@ -14,6 +14,13 @@ export type Equipo = {
   motivoRechazo?: string | null;
   totalJugadores?: number;
 };
+export type Jugador = {
+  id: number;
+  nombreCompleto: string;
+  fechaNacimiento: string;
+  identificacion: string;
+  fotoUrl: string;
+};
 export type Resultado<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; status: number; fallas?: string[] };

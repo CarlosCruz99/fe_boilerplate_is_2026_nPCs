@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element -- Fotos privadas y vistas previas sin optimización intermedia. */
 "use client";
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Equipo, Temporada } from "@/types/equipos";
 
@@ -82,5 +83,28 @@ export function EstadoInscripcion({ equipo }: { equipo: Equipo }) {
         <p>Motivo: {equipo.motivoRechazo ?? "Sin motivo disponible."}</p>
       )}
     </section>
+  );
+}
+export function FotoJugador({ url, nombre }: { url: string; nombre: string }) {
+  const [fallo, setFallo] = useState<string | null>(null);
+  const match = /^\/uploads\/jugadores\/([1-9]\d*\.(?:jpg|png))$/.exec(url);
+  if (!match || fallo === url)
+    return (
+      <div
+        className="league-photo league-placeholder"
+        role="img"
+        aria-label={`Foto no disponible de ${nombre}`}
+      >
+        Sin foto
+      </div>
+    );
+  // La ruta del mismo origen adjunta la credencial en el servidor.
+  return (
+    <img
+      className="league-photo"
+      src={`/api/fotos/jugadores/${match[1]}`}
+      alt={`Foto de ${nombre}`}
+      onError={() => setFallo(url)}
+    />
   );
 }

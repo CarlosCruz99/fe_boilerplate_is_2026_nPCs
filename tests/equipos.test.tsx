@@ -1,11 +1,12 @@
 import * as api from "@/app/actions/equipos";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InscripcionEquipo } from "@/app/equipos/nuevo/registro-equipo";
+import { PlantillaEquipo } from "@/app/equipos/[id]/jugadores/plantilla-equipo";
 import RegistroPage from "@/app/equipos/nuevo/page";
 import { useAuth } from "@/contexts/auth-context";
-import type { Equipo, Temporada } from "@/types/equipos";
+import type { Equipo, Jugador, Temporada } from "@/types/equipos";
 const { push, actualizarSesion } = vi.hoisted(() => ({
   push: vi.fn(),
   actualizarSesion: vi.fn(async () => {}),
@@ -24,10 +25,20 @@ const equipo: Equipo = {
   estado: "PENDIENTE",
   totalJugadores: 0,
 };
+const jugador: Jugador = {
+  id: 10,
+  nombreCompleto: "Ana López",
+  identificacion: "SEED-0001",
+  fechaNacimiento: "2000-05-10",
+  fotoUrl: "/uploads/jugadores/10.jpg",
+};
 vi.mock("@/app/actions/equipos", () => ({
   listarTemporadas: vi.fn(),
   consultarMiEquipo: vi.fn(),
   crearEquipo: vi.fn(),
+  consultarPlantilla: vi.fn(),
+  agregarJugador: vi.fn(),
+  quitarJugador: vi.fn(),
 }));
 vi.mock("@/contexts/auth-context", () => ({ useAuth: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
@@ -57,6 +68,10 @@ beforeEach(() => {
     ok: false,
     status: 404,
     error: "Sin equipo",
+  });
+  vi.mocked(api.consultarPlantilla).mockResolvedValue({
+    ok: true,
+    data: { equipo, jugadores: [jugador] },
   });
 });
 describe("Inscripción de equipo", () => {
@@ -132,6 +147,78 @@ describe("Inscripción de equipo", () => {
     expect(
       screen.queryByLabelText("Nombre del equipo"),
     ).not.toBeInTheDocument();
+  });
+});
+describe("Plantilla", () => {
+  it("rechaza una foto inválida en el cliente", async () => {
+    render(<PlantillaEquipo id={3} temporadaId={2} />);
+    const input = await screen.findByLabelText(/Fotografía/);
+    fireEvent.change(input, {
+      target: {
+        files: [new File(["pdf"], "foto.pdf", { type: "application/pdf" })],
+      },
+    });
+    expect(
+      await screen.findByText("La foto debe ser JPG o PNG."),
+    ).toBeInTheDocument();
+    expect(api.agregarJugador).not.toHaveBeenCalled();
+  });
+  it("bloquea alta con 15 y mantiene disponible quitar", async () => {
+    vi.mocked(api.consultarPlantilla).mockResolvedValue({
+      ok: true,
+      data: {
+        equipo,
+        jugadores: Array.from({ length: 15 }, (_, i) => ({
+          ...jugador,
+          id: i + 1,
+          nombreCompleto: `Jugador ${i}`,
+        })),
+      },
+    });
+    render(<PlantillaEquipo id={3} temporadaId={2} />);
+    expect(
+      await screen.findByText("El equipo ya tiene 15 jugadores."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Agregar jugador" }),
+    ).toBeDisabled();
+    expect(
+      screen.getAllByRole("button", { name: /^Quitar a/ })[0],
+    ).toBeEnabled();
+  });
+  it.each(["INSCRITO", "RECHAZADO"] as const)(
+    "bloquea modificaciones de equipo %s",
+    async (estado) => {
+      vi.mocked(api.consultarPlantilla).mockResolvedValue({
+        ok: true,
+        data: { equipo: { ...equipo, estado }, jugadores: [jugador] },
+      });
+      render(<PlantillaEquipo id={3} temporadaId={2} />);
+      expect(
+        await screen.findByText("El equipo ya no puede modificarse."),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Agregar jugador" }),
+      ).toBeDisabled();
+      expect(
+        screen.queryByRole("button", { name: /^Quitar a/ }),
+      ).not.toBeInTheDocument();
+    },
+  );
+  it("actualiza la plantilla y el contador después de quitar", async () => {
+    vi.mocked(api.quitarJugador).mockImplementation(async () => {
+      vi.mocked(api.consultarPlantilla).mockResolvedValue({
+        ok: true,
+        data: { equipo, jugadores: [] },
+      });
+      return { ok: true, data: undefined };
+    });
+    render(<PlantillaEquipo id={3} temporadaId={2} />);
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Quitar a Ana López" }),
+    );
+    expect(await screen.findByText(/0 \/ 15 jugadores/)).toBeInTheDocument();
+    expect(api.quitarJugador).toHaveBeenCalledWith(3, 10);
   });
 });
 describe("Permisos de las nuevas pantallas", () => {
