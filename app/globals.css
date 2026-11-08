@@ -24,3 +24,84 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.league-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.league-page h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.league-page h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.league-page h3 {
+  font-weight: 600;
+}
+.league-card {
+  border: 1px solid #a1a1aa;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.league-field,
+.league-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.league-field input,
+.league-field select,
+.league-field textarea {
+  border: 1px solid #71717a;
+  border-radius: 6px;
+  padding: 10px;
+  width: 100%;
+  min-width: 0;
+  background: var(--background);
+}
+.league-page button,
+.league-link {
+  border: 1px solid #71717a;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.league-page button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.league-page button:focus-visible,
+.league-page a:focus-visible,
+.league-field :focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 3px;
+}
+.league-page .league-primary {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}
+.league-alert {
+  border-left: 4px solid #dc2626;
+  padding: 12px;
+  background: #fee2e2;
+  color: #7f1d1d;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

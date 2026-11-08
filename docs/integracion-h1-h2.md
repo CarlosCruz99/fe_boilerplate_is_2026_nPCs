@@ -1,0 +1,5 @@
+# Frontend de inscripción y validación
+
+Documentación y evidencia separadas por tarea. FE-1.3 se reutiliza desde su commit existente.
+
+- [FE-1.1](FE-1.1.md)

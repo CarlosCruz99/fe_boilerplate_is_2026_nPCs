@@ -33,9 +33,14 @@ function ContenidoInicio() {
       </dl>
 
       {usuario.rol === "JUGADOR" && (
-        <Link href="/vincular-ficha" className="text-sm underline">
-          Vincular mi ficha
-        </Link>
+        <>
+          <Link href="/equipos/nuevo" className="text-sm underline">
+            Inscribir equipo / consultar estado
+          </Link>
+          <Link href="/vincular-ficha" className="text-sm underline">
+            Vincular mi ficha
+          </Link>
+        </>
       )}
 
       <form action={logout}>
