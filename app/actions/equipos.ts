@@ -1,8 +1,17 @@
 "use server";
 import { equiposApi } from "@/lib/equipos-api";
 import { idValido, validarJugador } from "@/lib/equipos-validation";
-import type { Equipo, Resultado, Temporada, Jugador } from "@/types/equipos";
+import type {
+  Equipo,
+  Jugador,
+  Resultado,
+  Temporada,
+  PaginaEquipos,
+  EquipoDetalle,
+  ValidacionEquipo,
+} from "@/types/equipos";
 import type { Rol } from "@/types/auth";
+
 function invalido(error = "Revisa los datos ingresados."): Resultado<never> {
   return { ok: false, status: 400, error };
 }
@@ -72,4 +81,37 @@ export async function quitarJugador(id: number, jugadorId: number) {
   return equiposApi<void>("JUGADOR", `equipos/${id}/jugadores/${jugadorId}`, {
     method: "DELETE",
   });
+}
+export async function listarPendientes(temporadaId: number, page: number) {
+  if (!idValido(temporadaId) || !idValido(page)) return invalido();
+  return equiposApi<PaginaEquipos>(
+    "ORGANIZADOR",
+    `equipos?temporadaId=${temporadaId}&estado=PENDIENTE&page=${page}&pageSize=20`,
+  );
+}
+export async function consultarDetalle(id: number) {
+  if (!idValido(id)) return invalido();
+  return equiposApi<EquipoDetalle>("ORGANIZADOR", `equipos/${id}`);
+}
+export async function validarEquipo(
+  id: number,
+  decision: "APROBAR" | "RECHAZAR",
+  motivo = "",
+) {
+  if (!idValido(id) || !["APROBAR", "RECHAZAR"].includes(decision))
+    return invalido();
+  motivo = motivo.trim();
+  if (decision === "RECHAZAR" && (motivo.length < 20 || motivo.length > 500))
+    return invalido("El motivo debe tener entre 20 y 500 caracteres.");
+  return equiposApi<ValidacionEquipo>(
+    "ORGANIZADOR",
+    `equipos/${id}/validacion`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        decision === "APROBAR" ? { decision } : { decision, motivo },
+      ),
+    },
+  );
 }
