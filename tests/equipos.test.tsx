@@ -5,8 +5,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InscripcionEquipo } from "@/app/equipos/nuevo/registro-equipo";
 import { PlantillaEquipo } from "@/app/equipos/[id]/jugadores/plantilla-equipo";
 import RegistroPage from "@/app/equipos/nuevo/page";
+import OrganizadorPage from "@/app/organizador/equipos/page";
+import { EquiposPendientes } from "@/app/organizador/equipos/equipos-pendientes";
 import { useAuth } from "@/contexts/auth-context";
-import type { Equipo, Jugador, Temporada } from "@/types/equipos";
+import type {
+  Equipo,
+  EquipoDetalle,
+  EquipoResumen,
+  Jugador,
+  Temporada,
+} from "@/types/equipos";
 const { push, actualizarSesion } = vi.hoisted(() => ({
   push: vi.fn(),
   actualizarSesion: vi.fn(async () => {}),
@@ -32,6 +40,36 @@ const jugador: Jugador = {
   fechaNacimiento: "2000-05-10",
   fotoUrl: "/uploads/jugadores/10.jpg",
 };
+const detalle: EquipoDetalle = {
+  ...equipo,
+  nombreCapitan: "Capitán",
+  creadoEn: "2026-11-01T12:00:00Z",
+  totalJugadores: 1,
+  motivoRechazo: null,
+  jugadores: [
+    {
+      id: jugador.id,
+      nombreCompleto: jugador.nombreCompleto,
+      fotoUrl: jugador.fotoUrl,
+      edad: 15,
+    },
+  ],
+};
+const resumen: EquipoResumen = {
+  id: equipo.id,
+  nombre: equipo.nombre,
+  estado: equipo.estado,
+  nombreCapitan: "Capitán",
+  totalJugadores: 1,
+  creadoEn: "2026-11-01T12:00:00Z",
+};
+async function abrirDetalle() {
+  render(<EquiposPendientes />);
+  await userEvent.click(
+    await screen.findByRole("button", { name: "Revisar Tigres" }),
+  );
+  await screen.findByText("Menor de 16 años");
+}
 vi.mock("@/app/actions/equipos", () => ({
   listarTemporadas: vi.fn(),
   consultarMiEquipo: vi.fn(),
@@ -39,6 +77,8 @@ vi.mock("@/app/actions/equipos", () => ({
   consultarPlantilla: vi.fn(),
   agregarJugador: vi.fn(),
   quitarJugador: vi.fn(),
+  listarPendientes: vi.fn(),
+  consultarDetalle: vi.fn(),
 }));
 vi.mock("@/contexts/auth-context", () => ({ useAuth: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
@@ -73,6 +113,20 @@ beforeEach(() => {
     ok: true,
     data: { equipo, jugadores: [jugador] },
   });
+  vi.mocked(api.listarPendientes).mockResolvedValue({
+    ok: true,
+    data: { items: [resumen], total: 1, page: 1, pageSize: 20 },
+  });
+  vi.mocked(api.consultarDetalle).mockResolvedValue({
+    ok: true,
+    data: detalle,
+  });
+  HTMLDialogElement.prototype.showModal = function () {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function () {
+    this.removeAttribute("open");
+  };
 });
 describe("Inscripción de equipo", () => {
   it("registra, actualiza sesión y navega conservando temporada", async () => {
@@ -221,6 +275,21 @@ describe("Plantilla", () => {
     expect(api.quitarJugador).toHaveBeenCalledWith(3, 10);
   });
 });
+describe("Organizador", () => {
+  it("renderiza el resumen real sin campos de detalle ni capitán anidado", async () => {
+    render(<EquiposPendientes />);
+    expect(await screen.findByText("Capitán: Capitán")).toBeInTheDocument();
+    expect(screen.getByText("Solicitud: 1/11/2026")).toBeInTheDocument();
+  });
+  it("muestra advertencias de plantilla y edad del servidor", async () => {
+    await abrirDetalle();
+    expect(screen.getByText(/Plantilla incompleta/)).toBeInTheDocument();
+    expect(screen.getByText("Menor de 16 años")).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Foto de Ana López" }),
+    ).toHaveAttribute("src", "/api/fotos/jugadores/10.jpg");
+  });
+});
 describe("Permisos de las nuevas pantallas", () => {
   it("un organizador no carga el formulario de inscripción", () => {
     vi.mocked(useAuth).mockReturnValue({
@@ -244,5 +313,34 @@ describe("Permisos de las nuevas pantallas", () => {
       screen.getByText("No tienes permiso para ver esta página."),
     ).toBeInTheDocument();
     expect(api.listarTemporadas).not.toHaveBeenCalled();
+  });
+  it("un capitán no pide datos del organizador", () => {
+    render(<OrganizadorPage />);
+    expect(
+      screen.getByText("No tienes permiso para ver esta página."),
+    ).toBeInTheDocument();
+    expect(api.listarTemporadas).not.toHaveBeenCalled();
+    expect(api.listarPendientes).not.toHaveBeenCalled();
+  });
+});
+describe("Filtros y paginación", () => {
+  it("reinicia en página 1 al cambiar de temporada", async () => {
+    vi.mocked(api.listarTemporadas).mockResolvedValue({
+      ok: true,
+      data: [temporada, { ...temporada, id: 4, nombre: "Clausura" }],
+    });
+    vi.mocked(api.listarPendientes).mockImplementation(async (_id, page) => ({
+      ok: true,
+      data: { items: [detalle], total: 21, page, pageSize: 20 },
+    }));
+    render(<EquiposPendientes />);
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Siguiente" }),
+    );
+    await screen.findByText("Página 2 de 2");
+    await userEvent.selectOptions(screen.getByLabelText("Temporada"), "4");
+    await waitFor(() =>
+      expect(api.listarPendientes).toHaveBeenLastCalledWith(4, 1),
+    );
   });
 });

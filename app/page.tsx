@@ -43,6 +43,12 @@ function ContenidoInicio() {
         </>
       )}
 
+      {usuario.rol === "ORGANIZADOR" && (
+        <Link href="/organizador/equipos" className="text-sm underline">
+          Validar inscripciones
+        </Link>
+      )}
+
       <form action={logout}>
         <button
           type="submit"

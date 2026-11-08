@@ -123,3 +123,15 @@ body {
   place-items: center;
   font-size: 0.85rem;
 }
+.league-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.league-warning {
+  background: #fef3c7;
+  color: #78350f;
+  border-radius: 6px;
+  padding: 10px;
+}

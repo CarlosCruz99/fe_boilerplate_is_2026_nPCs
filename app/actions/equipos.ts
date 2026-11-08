@@ -1,7 +1,14 @@
 "use server";
 import { equiposApi } from "@/lib/equipos-api";
 import { idValido, validarJugador } from "@/lib/equipos-validation";
-import type { Equipo, Resultado, Temporada, Jugador } from "@/types/equipos";
+import type {
+  Equipo,
+  Resultado,
+  Temporada,
+  Jugador,
+  PaginaEquipos,
+  EquipoDetalle,
+} from "@/types/equipos";
 import type { Rol } from "@/types/auth";
 function invalido(error = "Revisa los datos ingresados."): Resultado<never> {
   return { ok: false, status: 400, error };
@@ -72,4 +79,15 @@ export async function quitarJugador(id: number, jugadorId: number) {
   return equiposApi<void>("JUGADOR", `equipos/${id}/jugadores/${jugadorId}`, {
     method: "DELETE",
   });
+}
+export async function listarPendientes(temporadaId: number, page: number) {
+  if (!idValido(temporadaId) || !idValido(page)) return invalido();
+  return equiposApi<PaginaEquipos>(
+    "ORGANIZADOR",
+    `equipos?temporadaId=${temporadaId}&estado=PENDIENTE&page=${page}&pageSize=20`,
+  );
+}
+export async function consultarDetalle(id: number) {
+  if (!idValido(id)) return invalido();
+  return equiposApi<EquipoDetalle>("ORGANIZADOR", `equipos/${id}`);
 }

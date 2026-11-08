@@ -21,6 +21,32 @@ export type Jugador = {
   identificacion: string;
   fotoUrl: string;
 };
+export type EquipoResumen = {
+  id: number;
+  nombre: string;
+  estado: EstadoEquipo;
+  nombreCapitan: string;
+  totalJugadores: number;
+  creadoEn: string;
+};
+export type JugadorDetalle = Pick<
+  Jugador,
+  "id" | "nombreCompleto" | "fotoUrl"
+> & {
+  edad: number;
+};
+export type EquipoDetalle = EquipoResumen & {
+  temporadaId: number;
+  capitanId: string;
+  motivoRechazo: string | null;
+  jugadores: JugadorDetalle[];
+};
+export type PaginaEquipos = {
+  items: EquipoResumen[];
+  total: number;
+  page: number;
+  pageSize: number;
+};
 export type Resultado<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; status: number; fallas?: string[] };
