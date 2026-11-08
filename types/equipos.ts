@@ -21,6 +21,7 @@ export type Jugador = {
   identificacion: string;
   fotoUrl: string;
 };
+// Contrato de consulta-equipos.dto.ts del backend.
 export type EquipoResumen = {
   id: number;
   nombre: string;
@@ -40,6 +41,13 @@ export type EquipoDetalle = EquipoResumen & {
   capitanId: string;
   motivoRechazo: string | null;
   jugadores: JugadorDetalle[];
+};
+export type ValidacionEquipo = {
+  id: number;
+  estado: EstadoEquipo;
+  validadoPor: string;
+  fechaValidacion: string;
+  motivoRechazo: string | null;
 };
 export type PaginaEquipos = {
   items: EquipoResumen[];

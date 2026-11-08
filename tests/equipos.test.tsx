@@ -1,5 +1,10 @@
-import * as api from "@/app/actions/equipos";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InscripcionEquipo } from "@/app/equipos/nuevo/registro-equipo";
@@ -7,6 +12,7 @@ import { PlantillaEquipo } from "@/app/equipos/[id]/jugadores/plantilla-equipo";
 import RegistroPage from "@/app/equipos/nuevo/page";
 import OrganizadorPage from "@/app/organizador/equipos/page";
 import { EquiposPendientes } from "@/app/organizador/equipos/equipos-pendientes";
+import * as api from "@/app/actions/equipos";
 import { useAuth } from "@/contexts/auth-context";
 import type {
   Equipo,
@@ -15,10 +21,24 @@ import type {
   Jugador,
   Temporada,
 } from "@/types/equipos";
+
+vi.mock("@/app/actions/equipos", () => ({
+  listarTemporadas: vi.fn(),
+  consultarMiEquipo: vi.fn(),
+  crearEquipo: vi.fn(),
+  consultarPlantilla: vi.fn(),
+  agregarJugador: vi.fn(),
+  quitarJugador: vi.fn(),
+  listarPendientes: vi.fn(),
+  consultarDetalle: vi.fn(),
+  validarEquipo: vi.fn(),
+}));
+vi.mock("@/contexts/auth-context", () => ({ useAuth: vi.fn() }));
 const { push, actualizarSesion } = vi.hoisted(() => ({
   push: vi.fn(),
   actualizarSesion: vi.fn(async () => {}),
 }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 const temporada: Temporada = {
   id: 2,
   nombre: "Apertura",
@@ -55,6 +75,7 @@ const detalle: EquipoDetalle = {
     },
   ],
 };
+
 const resumen: EquipoResumen = {
   id: equipo.id,
   nombre: equipo.nombre,
@@ -63,25 +84,7 @@ const resumen: EquipoResumen = {
   totalJugadores: 1,
   creadoEn: "2026-11-01T12:00:00Z",
 };
-async function abrirDetalle() {
-  render(<EquiposPendientes />);
-  await userEvent.click(
-    await screen.findByRole("button", { name: "Revisar Tigres" }),
-  );
-  await screen.findByText("Menor de 16 años");
-}
-vi.mock("@/app/actions/equipos", () => ({
-  listarTemporadas: vi.fn(),
-  consultarMiEquipo: vi.fn(),
-  crearEquipo: vi.fn(),
-  consultarPlantilla: vi.fn(),
-  agregarJugador: vi.fn(),
-  quitarJugador: vi.fn(),
-  listarPendientes: vi.fn(),
-  consultarDetalle: vi.fn(),
-}));
-vi.mock("@/contexts/auth-context", () => ({ useAuth: vi.fn() }));
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
+
 beforeEach(() => {
   vi.resetAllMocks();
   vi.mocked(useAuth).mockReturnValue({
@@ -128,6 +131,7 @@ beforeEach(() => {
     this.removeAttribute("open");
   };
 });
+
 describe("Inscripción de equipo", () => {
   it("registra, actualiza sesión y navega conservando temporada", async () => {
     vi.mocked(api.crearEquipo).mockResolvedValue({ ok: true, data: equipo });
@@ -203,6 +207,7 @@ describe("Inscripción de equipo", () => {
     ).not.toBeInTheDocument();
   });
 });
+
 describe("Plantilla", () => {
   it("rechaza una foto inválida en el cliente", async () => {
     render(<PlantillaEquipo id={3} temporadaId={2} />);
@@ -275,12 +280,21 @@ describe("Plantilla", () => {
     expect(api.quitarJugador).toHaveBeenCalledWith(3, 10);
   });
 });
+
+async function abrirDetalle() {
+  render(<EquiposPendientes />);
+  await userEvent.click(
+    await screen.findByRole("button", { name: "Revisar Tigres" }),
+  );
+  await screen.findByRole("button", { name: "Aprobar" });
+}
 describe("Organizador", () => {
   it("renderiza el resumen real sin campos de detalle ni capitán anidado", async () => {
     render(<EquiposPendientes />);
     expect(await screen.findByText("Capitán: Capitán")).toBeInTheDocument();
     expect(screen.getByText("Solicitud: 1/11/2026")).toBeInTheDocument();
   });
+
   it("muestra advertencias de plantilla y edad del servidor", async () => {
     await abrirDetalle();
     expect(screen.getByText(/Plantilla incompleta/)).toBeInTheDocument();
@@ -289,7 +303,101 @@ describe("Organizador", () => {
       screen.getByRole("img", { name: "Foto de Ana López" }),
     ).toHaveAttribute("src", "/api/fotos/jugadores/10.jpg");
   });
+  it("bloquea rechazo corto, conserva motivo con error y envía motivo válido", async () => {
+    vi.mocked(api.validarEquipo).mockResolvedValue({
+      ok: false,
+      status: 503,
+      error: "Intenta otra vez",
+    });
+    await abrirDetalle();
+    await userEvent.click(screen.getByRole("button", { name: "Rechazar" }));
+    const dialog = screen.getByRole("dialog");
+    const textarea = within(dialog).getByLabelText("Motivo del rechazo");
+    await userEvent.type(textarea, "corto");
+    expect(
+      within(dialog).getByRole("button", { name: "Confirmar rechazo" }),
+    ).toBeDisabled();
+    expect(api.validarEquipo).not.toHaveBeenCalled();
+    await userEvent.clear(textarea);
+    await userEvent.type(
+      textarea,
+      "Faltan jugadores para completar la plantilla.",
+    );
+    await userEvent.click(
+      within(dialog).getByRole("button", { name: "Confirmar rechazo" }),
+    );
+    expect(await screen.findByText("Intenta otra vez")).toBeInTheDocument();
+    expect(textarea).toHaveValue(
+      "Faltan jugadores para completar la plantilla.",
+    );
+    expect(api.validarEquipo).toHaveBeenCalledWith(
+      3,
+      "RECHAZAR",
+      "Faltan jugadores para completar la plantilla.",
+    );
+  });
+  it("aprueba con confirmación y retira el equipo de pendientes", async () => {
+    vi.mocked(api.validarEquipo).mockImplementation(async () => {
+      vi.mocked(api.listarPendientes).mockResolvedValue({
+        ok: true,
+        data: { items: [], total: 0, page: 1, pageSize: 20 },
+      });
+      return {
+        ok: true,
+        data: {
+          id: equipo.id,
+          estado: "INSCRITO",
+          validadoPor: "org",
+          fechaValidacion: "2026-11-08T15:00:00Z",
+          motivoRechazo: null,
+        },
+      };
+    });
+    await abrirDetalle();
+    await userEvent.click(screen.getByRole("button", { name: "Aprobar" }));
+    expect(api.validarEquipo).not.toHaveBeenCalled();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Confirmar aprobación" }),
+    );
+    expect(
+      await screen.findByText("No hay equipos pendientes en esta temporada."),
+    ).toBeInTheDocument();
+  });
+  it("muestra fallas específicas 422", async () => {
+    vi.mocked(api.validarEquipo).mockResolvedValue({
+      ok: false,
+      status: 422,
+      error: "Requisitos no cumplidos",
+      fallas: ["Hay un jugador menor de 16 años", "Faltan jugadores"],
+    });
+    await abrirDetalle();
+    await userEvent.click(screen.getByRole("button", { name: "Aprobar" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Confirmar aprobación" }),
+    );
+    expect(
+      await screen.findByText("Hay un jugador menor de 16 años"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Faltan jugadores")).toBeInTheDocument();
+  });
+  it("vuelve a consultar después de un 409", async () => {
+    vi.mocked(api.validarEquipo).mockResolvedValue({
+      ok: false,
+      status: 409,
+      error: "El equipo ya fue validado.",
+    });
+    await abrirDetalle();
+    await userEvent.click(screen.getByRole("button", { name: "Aprobar" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Confirmar aprobación" }),
+    );
+    expect(
+      await screen.findByText("El equipo ya fue validado."),
+    ).toBeInTheDocument();
+    await waitFor(() => expect(api.listarPendientes).toHaveBeenCalledTimes(2));
+  });
 });
+
 describe("Permisos de las nuevas pantallas", () => {
   it("un organizador no carga el formulario de inscripción", () => {
     vi.mocked(useAuth).mockReturnValue({
@@ -323,6 +431,7 @@ describe("Permisos de las nuevas pantallas", () => {
     expect(api.listarPendientes).not.toHaveBeenCalled();
   });
 });
+
 describe("Filtros y paginación", () => {
   it("reinicia en página 1 al cambiar de temporada", async () => {
     vi.mocked(api.listarTemporadas).mockResolvedValue({
@@ -342,5 +451,48 @@ describe("Filtros y paginación", () => {
     await waitFor(() =>
       expect(api.listarPendientes).toHaveBeenLastCalledWith(4, 1),
     );
+  });
+  it("regresa a la página anterior si una decisión vacía la última", async () => {
+    vi.mocked(api.listarPendientes).mockImplementation(async (_id, page) => ({
+      ok: true,
+      data: { items: [detalle], total: 21, page, pageSize: 20 },
+    }));
+    vi.mocked(api.validarEquipo).mockImplementation(async () => {
+      vi.mocked(api.listarPendientes).mockImplementation(async (_id, page) => ({
+        ok: true,
+        data: {
+          items: page === 1 ? [detalle] : [],
+          total: 20,
+          page,
+          pageSize: 20,
+        },
+      }));
+      return {
+        ok: true,
+        data: {
+          id: equipo.id,
+          estado: "INSCRITO",
+          validadoPor: "org",
+          fechaValidacion: "2026-11-08T15:00:00Z",
+          motivoRechazo: null,
+        },
+      };
+    });
+    render(<EquiposPendientes />);
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Siguiente" }),
+    );
+    await screen.findByText("Página 2 de 2");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Revisar Tigres" }),
+    );
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Aprobar" }),
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Confirmar aprobación" }),
+    );
+    await screen.findByText("Página 1 de 1");
+    expect(api.listarPendientes).toHaveBeenLastCalledWith(2, 1);
   });
 });

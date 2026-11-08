@@ -46,9 +46,15 @@ export async function equiposApi<T>(
         ok: false,
         status: res.status,
         error:
-          typeof message === "string"
-            ? message
-            : `No pudimos completar la solicitud (${res.status}).`,
+          body.codigo === "TEMPORADA_COMPLETA"
+            ? "La temporada está completa."
+            : res.status === 409 && rol === "ORGANIZADOR"
+              ? "El equipo ya fue validado. Actualizamos los pendientes."
+              : body.codigo === "REQUISITOS_NO_CUMPLIDOS"
+                ? "El equipo no cumple los requisitos de inscripción."
+                : typeof message === "string"
+                  ? message
+                  : `No pudimos completar la solicitud (${res.status}).`,
         fallas: Array.isArray(body.fallas)
           ? body.fallas.filter((f: unknown) => typeof f === "string")
           : undefined,
