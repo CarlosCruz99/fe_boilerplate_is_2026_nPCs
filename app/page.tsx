@@ -44,9 +44,14 @@ function ContenidoInicio() {
       )}
 
       {usuario.rol === "ORGANIZADOR" && (
-        <Link href="/organizador/equipos" className="text-sm underline">
-          Validar inscripciones
-        </Link>
+        <>
+          <Link href="/organizador/calendario" className="text-sm underline">
+            Gestionar calendario
+          </Link>
+          <Link href="/organizador/equipos" className="text-sm underline">
+            Validar inscripciones
+          </Link>
+        </>
       )}
 
       <form action={logout}>

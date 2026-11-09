@@ -57,6 +57,7 @@ function Detalle({ partido, cerrar }: { partido: DetallePartido; cerrar: () => v
 
 export function CalendarioEquipoVista() {
   const { equipoActualId } = useAuth();
+  const [ahora, setAhora] = useState(() => Date.now());
   const consultar = useCallback(() => obtenerMiCalendario(), []);
   const { resultado, recargar } = useConsulta(consultar);
   const [detalle, setDetalle] = useState<DetallePartido | null>(null);
@@ -83,13 +84,13 @@ export function CalendarioEquipoVista() {
     ? [...resultado.data.partidos].filter((partido) => partido.estado !== "CANCELADO")
         .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
     : [];
-  const ahora = Date.now();
   const proximo = partidos.find((partido) =>
     (partido.estado === "PROGRAMADO" || partido.estado === "EN_CURSO") &&
     new Date(partido.fin).getTime() >= ahora
   );
 
   function actualizar() {
+    setAhora(Date.now());
     setDetalle(null);
     setErrorDetalle(null);
     recargar();
