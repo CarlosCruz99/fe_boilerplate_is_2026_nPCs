@@ -39,6 +39,7 @@ function ContenidoInicio() {
         <>
           <Link href="/organizador/calendario" className="text-sm underline">Gestionar calendario</Link>
           <Link href="/organizador/equipos" className="text-sm underline">Validar inscripciones</Link>
+          <Link href="/organizador/cuotas" className="text-sm underline">Registrar cuotas de inscripción y arbitraje</Link>
         </>
       )}
 

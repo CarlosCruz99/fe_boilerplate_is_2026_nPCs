@@ -1,0 +1,12 @@
+NPCS-66 | FE-12.1 | Notas técnicas
+
+Contrato revisado en BE-H12.zip (develop fusionado PR #14):
+- POST /api/v1/cuotas: rol ORGANIZADOR, concepto INSCRIPCION/ARBITRAJE, monto cadena decimal de hasta 2 posiciones, fecha YYYY-MM-DD >= hoy El Salvador.
+- INSCRIPCION prohíbe partidoId; ARBITRAJE lo exige, el equipo inscrito debe participar y el partido no puede estar cancelado.
+- GET /api/v1/temporadas, GET /api/v1/equipos?temporadaId=...&estado=INSCRITO, GET /api/v1/temporadas/:id/calendario permiten llenar los selectores.
+- Si falla el envío del aviso al capitán, el backend responde 201 con advertencia; NO reintentar automáticamente.
+
+Limitaciones/seguimiento:
+- No hay un GET /api/v1/cuotas para listar o verificar previamente si una cuota ya fue creada. Se maneja el conflicto 409 del servidor, pero falta consulta para inspección/reconciliación tras fallo de red.
+- El backend no expone un catálogo específico de partidos filtrado por equipo para registro de cuotas; el FE obtiene calendario de temporada y filtra partidos por equipo.
+- Las pruebas de extremo a extremo deben realizarse sobre BD de desarrollo: registrar cuota genera registro persistente y puede notificar a su capitán.
