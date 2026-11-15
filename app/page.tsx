@@ -35,6 +35,10 @@ function ContenidoInicio() {
         </>
       )}
 
+      {usuario.rol === "JUGADOR" && usuario.capitaneaEquipoId !== null && (
+        <Link href="/equipo/cuotas" className="text-sm underline">Cuotas y registro de pagos</Link>
+      )}
+
       {usuario.rol === "ORGANIZADOR" && (
         <>
           <Link href="/organizador/calendario" className="text-sm underline">Gestionar calendario</Link>
