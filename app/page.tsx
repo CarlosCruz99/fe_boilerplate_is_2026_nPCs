@@ -8,15 +8,11 @@ import Link from "next/link";
 function ContenidoInicio() {
   const { usuario } = useAuth();
 
-  if (!usuario) {
-    return null;
-  }
+  if (!usuario) return null;
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-8">
-      <h1 className="text-center text-3xl font-semibold">
-        Bienvenido, {usuario.nombre}
-      </h1>
+      <h1 className="text-center text-3xl font-semibold">Bienvenido, {usuario.nombre}</h1>
 
       <dl className="grid w-full max-w-md grid-cols-1 gap-2 break-words">
         <dt className="font-medium">Correo</dt>
@@ -34,33 +30,26 @@ function ContenidoInicio() {
 
       {usuario.rol === "JUGADOR" && (
         <>
-          <Link href="/equipos/nuevo" className="text-sm underline">
-            Inscribir equipo / consultar estado
-          </Link>
-          <Link href="/vincular-ficha" className="text-sm underline">
-            Vincular mi ficha
-          </Link>
+          <Link href="/equipos/nuevo" className="text-sm underline">Inscribir equipo / consultar estado</Link>
+          <Link href="/vincular-ficha" className="text-sm underline">Vincular mi ficha</Link>
         </>
       )}
 
       {usuario.rol === "ORGANIZADOR" && (
         <>
-          <Link href="/organizador/calendario" className="text-sm underline">
-            Gestionar calendario
-          </Link>
-          <Link href="/organizador/equipos" className="text-sm underline">
-            Validar inscripciones
-          </Link>
+          <Link href="/organizador/calendario" className="text-sm underline">Gestionar calendario</Link>
+          <Link href="/organizador/equipos" className="text-sm underline">Validar inscripciones</Link>
         </>
       )}
 
+      {usuario.rol === "ARBITRO" && (
+        <Link href="/arbitro/partidos" className="text-sm underline">
+          Abrir mesa de control del árbitro
+        </Link>
+      )}
+
       <form action={logout}>
-        <button
-          type="submit"
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700"
-        >
-          Cerrar sesión
-        </button>
+        <button type="submit" className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cerrar sesión</button>
       </form>
     </main>
   );
