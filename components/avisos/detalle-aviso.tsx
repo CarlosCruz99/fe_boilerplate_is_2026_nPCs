@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import { marcarMiAvisoLeido, obtenerMiAviso } from "@/app/actions/avisos";
 import { EtiquetaModulo } from "@/components/avisos/etiqueta-modulo";
+import { CambioPartido } from "@/components/avisos/cambio-partido";
 import { useConsulta } from "@/hooks/use-consulta";
 import type { Aviso } from "@/types/avisos";
 
@@ -11,6 +12,7 @@ const fecha = new Intl.DateTimeFormat("es-SV", { dateStyle: "long", timeStyle: "
 
 function enlaceRecurso(aviso: Aviso): { href: string; texto: string } | null {
   if (!aviso.referencia) return null;
+  if (aviso.tipo === "PARTIDO_MODIFICADO") return null;
   if (aviso.referencia.tipo === "JORNADA" || aviso.referencia.tipo === "PARTIDO") return { href: "/mi-calendario", texto: "Ver calendario del equipo" };
   // El proyecto aún no dispone de rutas funcionales para cuotas o pagos.
   return null;
@@ -64,8 +66,9 @@ export function DetalleAviso({ id, integrado = false, onLeido }: { id: number; i
         <span className="mx-3" aria-hidden="true">·</span>{leido ? "Leído" : "Sin leer"}
       </p>
       <p className="mt-7 whitespace-pre-wrap text-base leading-relaxed text-slate-700 dark:text-slate-200 sm:text-lg">{aviso.mensaje}</p>
+      {aviso.tipo === "PARTIDO_MODIFICADO" && <CambioPartido aviso={aviso} />}
       {recurso && <Link href={recurso.href} className="mt-8 inline-flex rounded-lg bg-blue-700 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-800">{recurso.texto}</Link>}
-      {aviso.referencia && !recurso && <p className="mt-7 text-sm text-slate-500 dark:text-slate-400">Recurso relacionado: {aviso.referencia.tipo.toLowerCase()} #{aviso.referencia.id}. Aún no hay una pantalla disponible para este recurso.</p>}
+      {aviso.tipo !== "PARTIDO_MODIFICADO" && aviso.referencia && !recurso && <p className="mt-7 text-sm text-slate-500 dark:text-slate-400">Recurso relacionado: {aviso.referencia.tipo.toLowerCase()} #{aviso.referencia.id}. Aún no hay una pantalla disponible para este recurso.</p>}
       {!leido && <div><button type="button" disabled={marcando} onClick={() => void marcarLeido()} className="mt-6 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium disabled:opacity-50 dark:border-slate-600">{marcando ? "Guardando…" : "Marcar como leído"}</button></div>}
       {errorLectura && <p className="mt-3 text-sm text-red-700 dark:text-red-300" role="alert">{errorLectura}</p>}
     </article>
