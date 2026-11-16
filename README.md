@@ -45,3 +45,8 @@ Contrato, validaciones y resultados de pruebas: [FE-13.1](docs/FE-13.1.md).
 Desde el calendario del organizador, **Subir contenido** abre el formulario de
 fotos/videos por partido. Contrato, límites, reintentos y evidencias:
 [FE-17.1](docs/FE-17.1.md).
+
+## Asignación de árbitro H25
+
+El organizador puede cambiar el árbitro de un partido programado desde su detalle
+en el calendario. Contrato y resultados de QA: [FE-25.1](docs/FE-25.1.md).
