@@ -1,0 +1,72 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, expect, it, vi } from "vitest";
+import { FormularioGaleria } from "@/app/partidos/[id]/galeria/subir/formulario-galeria";
+import { subirArchivoGaleria } from "@/lib/galeria-upload";
+import { validarArchivoGaleria, validarDescripcionGaleria, LIMITE_FOTO, LIMITE_VIDEO } from "@/lib/galeria-validation";
+vi.mock("@/lib/galeria-upload", () => ({ subirArchivoGaleria: vi.fn() }));
+const refresh = vi.fn();
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh }) }));
+beforeEach(() => vi.clearAllMocks());
+const foto = (nombre = "foto.png") => new File(["png"], nombre, { type: "image/png" });
+function seleccionar(archivos: File[]) { fireEvent.change(screen.getByLabelText("Archivos"), { target: { files: archivos } }); }
+const exito = (nombre: string) => ({ partidoId: 5, totalActivos: 1, limite: 30, resultados: [{ nombre, estado: "PUBLICADO" as const, contenidoId: "uuid-1" }] });
+it("valida tipos, extensión, vacío, límites y descripción", () => {
+  expect(validarArchivoGaleria(foto())).toBeNull();
+  expect(validarArchivoGaleria(new File([], "vacio.png", { type: "image/png" }))).toContain("vacío");
+  expect(validarArchivoGaleria(foto("falso.exe"))).toContain("Formato");
+  expect(validarArchivoGaleria(new File(["pdf"], "acta.pdf", { type: "application/pdf" }))).toContain("Formato");
+  expect(validarArchivoGaleria(new File([new Uint8Array(LIMITE_FOTO)], "limite.jpg", { type: "image/jpeg" }))).toBeNull();
+  expect(validarArchivoGaleria(new File([new Uint8Array(LIMITE_FOTO + 1)], "grande.png", { type: "image/png" }))).toContain("5 MiB");
+  expect(validarArchivoGaleria(new File([new Uint8Array(LIMITE_VIDEO)], "limite.mp4", { type: "video/mp4" }))).toBeNull();
+  expect(validarArchivoGaleria(new File([new Uint8Array(LIMITE_VIDEO + 1)], "grande.mp4", { type: "video/mp4" }))).toContain("50 MiB");
+  expect(validarDescripcionGaleria("a".repeat(201))).toContain("200");
+});
+it("rechaza inválidos sin afectar los válidos; permite retirar antes de enviar", async () => {
+  vi.mocked(subirArchivoGaleria).mockResolvedValue(exito("foto.png"));
+  render(<FormularioGaleria partidoId={5} />);
+  seleccionar([foto(), foto("retirar.png"), new File(["x"], "mal.pdf", { type: "application/pdf" })]);
+  fireEvent.click(screen.getByRole("button", { name: "Retirar retirar.png" }));
+  expect(screen.queryByRole("heading", { name: "retirar.png" })).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Subir pendientes" }));
+  await screen.findByText("Publicado");
+  expect(subirArchivoGaleria).toHaveBeenCalledTimes(1);
+  expect(screen.getByText(/Formato no permitido/)).toBeInTheDocument();
+  expect(refresh).toHaveBeenCalled();
+});
+it("mide progreso sin anticipar éxito; bloquea doble envío y reintenta solo el fallo con su descripción original", async () => {
+  let resolver!: (r: ReturnType<typeof exito>) => void;
+  vi.mocked(subirArchivoGaleria).mockImplementationOnce((_id, _f, _d, progreso) => { progreso(100); return new Promise(resolve => { resolver = resolve; }); }).mockRejectedValueOnce(new Error("Fallo de red")).mockResolvedValueOnce(exito("segunda.png"));
+  render(<FormularioGaleria partidoId={5} />);
+  seleccionar([foto(), foto("segunda.png")]);
+  fireEvent.change(screen.getByLabelText("Descripción opcional"), { target: { value: "Descripción original" } });
+  fireEvent.click(screen.getByRole("button", { name: "Subir pendientes" }));
+  expect(screen.queryByText("Publicado")).toBeNull();
+  expect(screen.getByText(/Esperando confirmación/)).toBeInTheDocument();
+  expect(screen.getByLabelText("Progreso de foto.png")).toHaveAttribute("value", "100");
+  expect(screen.getByRole("button", { name: "Subiendo contenido..." })).toBeDisabled();
+  resolver(exito("foto.png"));
+  await screen.findByText("Fallo de red");
+  fireEvent.change(screen.getByLabelText("Descripción opcional"), { target: { value: "Otra descripción" } });
+  fireEvent.click(screen.getByRole("button", { name: "Reintentar fallidos" }));
+  await waitFor(() => expect(screen.getAllByText("Publicado")).toHaveLength(2));
+  expect(subirArchivoGaleria).toHaveBeenCalledTimes(3);
+  expect(vi.mocked(subirArchivoGaleria).mock.calls[2][1].name).toBe("segunda.png");
+  expect(vi.mocked(subirArchivoGaleria).mock.calls[2][2]).toBe("Descripción original");
+});
+it("muestra el límite del servicio y conserva el error por archivo", async () => {
+  vi.mocked(subirArchivoGaleria).mockResolvedValue({ partidoId: 5, totalActivos: 30, limite: 30, resultados: [{ nombre: "foto.png", estado: "ERROR", motivo: "El partido ya tiene 30 archivos activos." }] });
+  render(<FormularioGaleria partidoId={5} />); seleccionar([foto()]);
+  fireEvent.click(screen.getByRole("button", { name: "Subir pendientes" }));
+  await screen.findByText("El partido ya tiene 30 archivos activos.");
+  expect(screen.getByText(/0 espacios disponibles/)).toBeInTheDocument();
+  expect(screen.queryByText("Publicado")).toBeNull();
+});
+it("impide descripción larga y cola mayor a 30", () => {
+  render(<FormularioGaleria partidoId={5} />);
+  seleccionar(Array.from({ length: 31 }, (_, i) => foto(`${i}.png`)));
+  expect(screen.getByText(/La cola admite hasta 30/)).toBeInTheDocument();
+  seleccionar([foto()]);
+  fireEvent.change(screen.getByLabelText("Descripción opcional"), { target: { value: "a".repeat(201) } });
+  fireEvent.click(screen.getByRole("button", { name: "Subir pendientes" }));
+  expect(subirArchivoGaleria).not.toHaveBeenCalled();
+});
