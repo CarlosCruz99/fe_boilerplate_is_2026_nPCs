@@ -1,31 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AppShell } from "@/components/app-shell";
 import { AuthProvider } from "@/contexts/auth-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "SI Boilerplate",
-  description: "Boilerplate con login básico",
+  title: { default: "nPCs · Liga amateur", template: "%s | nPCs" },
+  description: "Gestiona tu liga: equipos, partidos, estadísticas y pagos en un solo lugar.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className="dark h-full antialiased"
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider><AppShell>{children}</AppShell></AuthProvider>
       </body>
     </html>
   );

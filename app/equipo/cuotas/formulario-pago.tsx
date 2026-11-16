@@ -61,36 +61,36 @@ export function FormularioPago() {
     } catch { setError("No se pudo confirmar el pago. Puedes reintentar con los mismos datos."); }
     finally { bloqueo.current = false; setEnviando(false); }
   }
-  return <main className="mx-auto w-full max-w-4xl space-y-6 p-4 sm:p-8">
+  return <main className="league-page">
     <Link href="/" className="underline">Volver al inicio</Link>
     <h1 className="text-2xl font-semibold">Cuotas y registro de pagos</h1>
     <p>El saldo descuenta pagos verificados. El disponible también reserva los pagos pendientes de verificación.</p>
-    {error && <p role="alert">{error}</p>}
+    {error && <p role="alert" className="league-alert">{error}</p>}
     <button type="button" disabled={cargando || enviando} onClick={() => { setError(""); void cargar(); }} className="rounded border px-4 py-2">Actualizar cuotas</button>
     {cargando && <p role="status">Cargando cuotas...</p>}
-    {cuotas.length === 0 ? (!cargando && !error && <p>No hay cuotas para tu equipo.</p>) : <>
+    {cuotas.length === 0 ? (!cargando && !error && <section className="league-card" role="status"><h2>Estás al día</h2><p>No hay cuotas para tu equipo.</p><Link href="/mi-calendario" className="league-link">Ver mis próximos partidos</Link></section>) : <>
       <div className="grid gap-4 sm:grid-cols-2">
-        {cuotas.map(c => <article key={c.id} className="space-y-2 rounded border p-4">
+        {cuotas.map(c => <article key={c.id} className="league-card">
           <h2 className="font-semibold">Cuota #{c.id} · {c.concepto === "INSCRIPCION" ? "Inscripción" : "Arbitraje"}</h2>
           <dl className="grid grid-cols-2 gap-2">
             {([["Monto total", c.montoTotal], ["Total verificado", c.totalVerificado], ["Saldo", c.saldo], ["Pendiente de verificación", c.pendienteVerificacion], ["Disponible", c.disponible]]).map(([nombre, valor]) => <div key={nombre}><dt>{nombre}</dt><dd className="font-medium">{dinero(valor)}</dd></div>)}
           </dl>
         </article>)}
       </div>
-      <form noValidate onSubmit={enviar} className="max-w-lg space-y-4">
-        <fieldset disabled={enviando || cargando} className="space-y-4">
+      <form noValidate onSubmit={enviar} className="league-card w-full">
+        <fieldset disabled={enviando || cargando} className="league-stack">
           <legend className="text-xl font-semibold">Registrar pago</legend>
-          <label className="block">Cuota<select required className={campo} value={seleccion} onChange={e => { cambiar(); setSeleccion(e.target.value); }}><option value="">Selecciona una cuota</option>{cuotas.map(c => <option key={c.id} value={c.id}>#{c.id} · {c.concepto} · Disponible {dinero(c.disponible)}</option>)}</select></label>
-          {cuota && <p>Equipo #{cuota.equipoId} · Concepto: {cuota.concepto}</p>}
+          <label className="block">Cuota<select required className={campo} value={seleccion} onChange={e => { cambiar(); setSeleccion(e.target.value); }}><option value="">Selecciona una cuota</option>{cuotas.map(c => <option key={c.id} value={c.id}>#{c.id} · {c.concepto === "INSCRIPCION" ? "Inscripción" : "Arbitraje"} · Disponible {dinero(c.disponible)}</option>)}</select></label>
+          {cuota && <p>Equipo #{cuota.equipoId} · Concepto: {cuota.concepto === "INSCRIPCION" ? "Inscripción" : "Arbitraje"}</p>}
           <label className="block">Monto (USD)<input required inputMode="decimal" className={campo} value={monto} onChange={e => { cambiar(); setMonto(e.target.value); }} /></label>
           <label className="block">Fecha de pago<input required type="date" max={hoySalvador()} className={campo} value={fecha} onChange={e => { cambiar(); setFecha(e.target.value); }} /></label>
           <label className="block">Comprobante<input required type="file" accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png" className={campo} onChange={e => { cambiar(); setArchivo(e.target.files?.[0] ?? null); }} /></label>
           <p className="text-sm">Un archivo PDF, JPG o PNG, de hasta 5 MiB.</p>
-          <button disabled={!cuota || !!confirmado} className="rounded border px-4 py-2" type="submit">{enviando ? "Enviando..." : "Registrar pago"}</button>
+          <button disabled={!cuota || !!confirmado} className="league-primary" type="submit">{enviando ? "Enviando..." : "Registrar pago"}</button>
         </fieldset>
       </form>
     </>}
-    {confirmado && <section role="status" className="space-y-2 rounded border p-4">
+    {confirmado && <section role="status" className="league-card">
       <h2 className="font-semibold">Pendiente de verificación</h2>
       <p>Número de registro: {confirmado.id}</p><p>Monto: {dinero(confirmado.monto)}</p><p>Fecha de pago: {confirmado.fechaPago.slice(0, 10)}</p>
       <p>{confirmado.mensaje ?? "El saldo se actualizará cuando un organizador apruebe el pago"}</p>

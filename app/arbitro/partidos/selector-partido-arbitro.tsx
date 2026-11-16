@@ -14,8 +14,8 @@ export function SelectorPartidoArbitro() {
 
   function abrirPartido() {
     const valor = idTexto.trim();
-    if (!/^\d+$/.test(valor)) {
-      setError("Ingresa un ID de partido válido.");
+    if (!/^[1-9]\d*$/.test(valor) || !Number.isSafeInteger(Number(valor))) {
+      setError("Ingresa un número de partido válido.");
       return;
     }
     setError(null);
@@ -23,10 +23,10 @@ export function SelectorPartidoArbitro() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-5xl flex-col justify-center px-4 py-10 sm:px-6">
+    <main className="league-page">
       <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
         <header className="bg-slate-900 px-8 py-8 text-white">
-          <p className="text-sm font-semibold tracking-wide text-slate-300">H5 · Actualización de marcador de un partido</p>
+          <p className="text-sm font-semibold tracking-wide text-slate-300">Control del encuentro</p>
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Mesa del árbitro</h1>
           <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
             Accede al partido asignado para iniciar el encuentro, actualizar el marcador y las faltas,
@@ -37,10 +37,10 @@ export function SelectorPartidoArbitro() {
         <div className="grid gap-8 px-8 py-8 lg:grid-cols-[1.5fr_1fr]">
           <div className="space-y-5">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900/60">
-              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Ruta esperada</p>
-              <p className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">/arbitro/partidos/:id</p>
+              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Tu próximo encuentro</p>
+              <p className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">Accede a tu partido</p>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                Como el backend todavía no expone un listado de partidos para el árbitro, por ahora debes abrir la vista usando el ID del partido asignado.
+                Introduce el número de partido que te proporcionó la organización para abrir la mesa de control.
               </p>
             </div>
 
@@ -52,7 +52,7 @@ export function SelectorPartidoArbitro() {
               }}
             >
               <label className="block text-sm font-semibold text-slate-800 dark:text-slate-200">
-                ID del partido
+                Número de partido
                 <input
                   className={`${campo} mt-2`}
                   type="number"
@@ -88,9 +88,9 @@ export function SelectorPartidoArbitro() {
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Estados del partido</h2>
             <div className="mt-5 space-y-4">
               {[
-                ["PROGRAMADO", "Solo se permite iniciar"],
-                ["EN_CURSO", "Marcador, faltas y participantes"],
-                ["FINALIZADO", "Solo lectura; H23 corrige"],
+                ["Programado", "Solo se permite iniciar"],
+                ["En curso", "Marcador, faltas y participantes"],
+                ["Finalizado", "Resultado y estadísticas en solo lectura"],
               ].map(([titulo, descripcion], indice) => (
                 <div key={titulo} className="space-y-3">
                   <div className={`rounded-2xl border px-4 py-5 text-center ${indice === 1 ? "bg-slate-100 dark:bg-slate-900" : indice === 2 ? "bg-emerald-50 dark:bg-emerald-950/40" : "bg-white dark:bg-slate-950"} dark:border-slate-800`}>

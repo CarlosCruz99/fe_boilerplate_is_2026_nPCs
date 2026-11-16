@@ -335,8 +335,8 @@ function DialogoDecision({
           </>
         ) : (
           <p>
-            ¿Confirmas que deseas inscribir a este equipo? El servidor
-            comprobará los requisitos y el cupo de la temporada.
+            ¿Confirmas que deseas inscribir a este equipo? Se comprobarán
+            los requisitos y el cupo de la temporada.
           </p>
         )}
         {error && (

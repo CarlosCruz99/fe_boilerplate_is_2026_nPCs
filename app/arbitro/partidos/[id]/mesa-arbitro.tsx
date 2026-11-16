@@ -116,7 +116,7 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
       <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-4xl items-center justify-center px-4 py-10 sm:px-6">
         <div className="w-full rounded-3xl border border-red-300 bg-red-50 p-8 text-red-900 dark:border-red-900 dark:bg-red-950/40 dark:text-red-100">
           <h1 className="text-2xl font-bold">Identificador de partido inválido</h1>
-          <p className="mt-3 text-sm">La ruta debe tener el formato <strong>/arbitro/partidos/:id</strong> usando un entero positivo.</p>
+          <p className="mt-3 text-sm">No encontramos un número de partido válido. Vuelve a la mesa del árbitro para seleccionar el encuentro.</p>
           <Link href="/arbitro/partidos" className="mt-5 inline-flex rounded-xl bg-red-700 px-5 py-3 text-sm font-semibold text-white">Volver</Link>
         </div>
       </main>
@@ -124,11 +124,11 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="league-page">
       <header className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
         <div className="bg-slate-900 px-8 py-8 text-white">
-          <p className="text-sm font-semibold tracking-wide text-slate-300">H5 | Actualización de marcador de un partido</p>
-          <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Wireframe: árbitro /arbitro/partidos/:id</h1>
+          <p className="text-sm font-semibold tracking-wide text-slate-300">Control del encuentro</p>
+          <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Mesa del partido</h1>
           <p className="mt-3 text-sm text-slate-300 sm:text-base">Vista operativa para iniciar, administrar y finalizar un partido asignado.</p>
         </div>
 
@@ -216,13 +216,13 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
             </div>
 
             <section className="rounded-2xl border border-slate-200 p-6 dark:border-slate-800">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Participantes (IDs de jugadores inscritos)</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Participantes del encuentro</h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                El backend actual recibe una lista completa de IDs, por eso esta vista usa captura manual. Puedes separarlos con coma, espacio o punto y coma.
+                Introduce los números de ficha de los jugadores que participaron. Puedes separarlos con coma, espacio o punto y coma.
               </p>
 
               <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-200">
-                IDs seleccionados
+                Números de ficha
                 <textarea
                   rows={3}
                   value={participantesTexto}
@@ -250,7 +250,7 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
                   onClick={() => {
                     const ids = listaIds(participantesTexto);
                     if (ids === null) {
-                      setAviso({ texto: "Los participantes deben ser IDs positivos, sin repetir y con máximo 30 elementos.", error: true });
+                      setAviso({ texto: "Introduce hasta 30 números de ficha válidos, sin repetir.", error: true });
                       return;
                     }
                     void ejecutar(
@@ -373,22 +373,16 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
               </section>
             )}
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
-              <p className="font-semibold text-slate-900 dark:text-white">Nota técnica</p>
-              <p className="mt-2">
-                Esta vista sigue el wireframe solicitado. Como el backend de H5 no expone todavía un endpoint de consulta para árbitros,
-                los nombres de equipos, jornada y cancha no pueden cargarse automáticamente desde el servidor en esta versión.
-              </p>
-            </div>
+
           </section>
 
           <aside className="space-y-5">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Estados del partido</h2>
-            {tarjetaEstado("PROGRAMADO", "Solo se permite iniciar", estado === "PROGRAMADO")}
+            {tarjetaEstado("Programado", "Solo se permite iniciar", estado === "PROGRAMADO")}
             <div className="mx-auto h-9 w-px bg-blue-500" aria-hidden="true" />
-            {tarjetaEstado("EN_CURSO", "Marcador, faltas y participantes", estado === "EN_CURSO")}
+            {tarjetaEstado("En curso", "Marcador, faltas y participantes", estado === "EN_CURSO")}
             <div className="mx-auto h-9 w-px bg-blue-500" aria-hidden="true" />
-            {tarjetaEstado("FINALIZADO", "Solo lectura; H23 corrige", estado === "FINALIZADO", true)}
+            {tarjetaEstado("Finalizado", "Resultado y estadísticas en solo lectura", estado === "FINALIZADO", true)}
           </aside>
         </div>
       </header>

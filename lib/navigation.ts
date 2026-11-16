@@ -1,0 +1,26 @@
+import type { UsuarioSesion } from "@/types/auth";
+
+export type Acceso = { href: string; titulo: string; descripcion: string };
+
+export const nombresRol = { JUGADOR: "Jugador", ARBITRO: "Árbitro", ORGANIZADOR: "Organizador" };
+
+export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
+  if (usuario.rol === "ORGANIZADOR") return [
+    { href: "/organizador/calendario", titulo: "Calendario", descripcion: "Organiza jornadas, programa encuentros y asigna árbitros." },
+    { href: "/organizador/equipos", titulo: "Inscripciones", descripcion: "Revisa las solicitudes y valida los equipos de la liga." },
+    { href: "/organizador/cuotas", titulo: "Cuotas", descripcion: "Administra las cuotas de inscripción y arbitraje." },
+  ];
+  if (usuario.rol === "ARBITRO") return [
+    { href: "/arbitro/partidos", titulo: "Mesa del árbitro", descripcion: "Gestiona el marcador, los participantes y las estadísticas de tu partido." },
+  ];
+  return [
+    { href: "/mi-calendario", titulo: "Mi calendario", descripcion: "Consulta los encuentros, las canchas y los horarios de tu equipo." },
+    { href: "/avisos", titulo: "Avisos", descripcion: "Mantente al día con las novedades de la liga." },
+    { href: "/equipos/nuevo", titulo: "Inscripción de equipo", descripcion: "Inscribe tu equipo o consulta el estado de tu solicitud." },
+    ...(usuario.capitaneaEquipoId !== null ? [
+      { href: `/equipos/${usuario.capitaneaEquipoId}/jugadores`, titulo: "Mi plantilla", descripcion: "Administra los jugadores y sus fichas para la temporada." },
+      { href: "/equipo/cuotas", titulo: "Cuotas y pagos", descripcion: "Consulta tus cuotas y registra los pagos de tu equipo." },
+    ] : []),
+    { href: "/vincular-ficha", titulo: "Mi ficha", descripcion: "Vincula tu cuenta a la ficha de jugador de tu equipo." },
+  ];
+}

@@ -40,12 +40,12 @@ export function FormularioCuota() {
   const [cuotaCreada, setCuotaCreada] = useState<CuotaCreada | null>(null);
 
   useEffect(() => {
-    const actual = fechaHoySalvador();
-    setHoy(actual);
-    setVencimiento(actual);
     let vigente = true;
     void temporadasParaCuotas().then((resultado) => {
       if (!vigente) return;
+      const actual = fechaHoySalvador();
+      setHoy(actual);
+      setVencimiento(actual);
       if (resultado.ok) setTemporadas(resultado.data);
       else setMensaje({ tipo: "error", texto: resultado.error });
       setCargandoCatalogos(false);
@@ -54,19 +54,9 @@ export function FormularioCuota() {
   }, []);
 
   useEffect(() => {
-    setEquipos([]);
-    setPartidos([]);
-    setEquipoId("");
-    setPartidoId("");
-    setCuotaCreada(null);
-    if (!temporadaId) {
-      setCargandoOpciones(false);
-      return;
-    }
+    if (!temporadaId) return;
     const id = Number(temporadaId);
     let vigente = true;
-    setCargandoOpciones(true);
-    setMensaje(null);
     void Promise.all([equiposParaCuotas(id), partidosParaCuotas(id)]).then(([resultadoEquipos, resultadoPartidos]) => {
       if (!vigente) return;
       if (resultadoEquipos.ok) setEquipos(resultadoEquipos.data);
@@ -136,12 +126,12 @@ export function FormularioCuota() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-10 text-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:px-8">
+    <main className="league-page">
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="border-b border-slate-300 pb-6 dark:border-slate-700">
           <Link href="/" className="text-sm font-semibold text-teal-800 underline-offset-4 hover:underline dark:text-teal-300">← Volver al inicio</Link>
           <p className="mt-6 text-sm font-bold tracking-wider text-teal-800 dark:text-teal-300">nPCs / Administración / Cuotas</p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Registrar cuotas de inscripción y arbitraje</h1>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Cuotas de la liga</h1>
         </header>
 
         <section className="space-y-4">
@@ -160,7 +150,11 @@ export function FormularioCuota() {
               </label>
               <label className={etiqueta}>
                 Temporada
-                <select required className={campo} value={temporadaId} disabled={guardando || cargandoCatalogos} onChange={(event) => setTemporadaId(event.target.value)}>
+                <select required className={campo} value={temporadaId} disabled={guardando || cargandoCatalogos} onChange={(event) => {
+                  setTemporadaId(event.target.value);
+                  setEquipos([]); setPartidos([]); setEquipoId(""); setPartidoId("");
+                  setCuotaCreada(null); setMensaje(null); setCargandoOpciones(Boolean(event.target.value));
+                }}>
                   <option value="">{cargandoCatalogos ? "Cargando temporadas..." : "Selecciona temporada"}</option>
                   {temporadas.map((temporada) => <option key={temporada.id} value={temporada.id}>{temporada.nombre}</option>)}
                 </select>
@@ -193,7 +187,7 @@ export function FormularioCuota() {
               {cuotaCreada && <button type="button" className="rounded-lg border border-teal-700 px-5 py-3 font-semibold text-teal-800 dark:text-teal-300" onClick={() => { setCuotaCreada(null); setMensaje(null); setPartidoId(""); }}>Registrar otra cuota</button>}
             </div>
             {mensaje && <div role={mensaje.tipo === "error" ? "alert" : "status"} className={`mt-6 rounded-lg border p-4 text-sm ${mensaje.tipo === "error" ? "border-red-300 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200" : mensaje.tipo === "advertencia" ? "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200" : "border-teal-300 bg-teal-50 text-teal-900 dark:border-teal-700 dark:bg-teal-950/40 dark:text-teal-200"}`}>{mensaje.texto}</div>}
-            <p className="mt-6 text-xs text-slate-500 dark:text-slate-400">El registro modifica la base de datos y puede notificar al capitán. Si ocurre un error de conexión, comprueba antes si se creó la cuota para evitar duplicados.</p>
+            <p className="mt-6 text-xs text-slate-500 dark:text-slate-400">El capitán recibirá un aviso de la nueva cuota. Si pierdes la conexión, comprueba el registro antes de volver a enviarlo.</p>
           </form>
         </section>
       </div>

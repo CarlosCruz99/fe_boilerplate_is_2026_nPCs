@@ -54,13 +54,13 @@ export function FormularioGaleria({ partidoId }: { partidoId: number }) {
   }
   const pendientes = cola.filter(e => e.estado === "Pendiente");
   const fallidos = cola.filter(e => e.estado === "Error" && !validarArchivoGaleria(e.archivo));
-  return <main className="mx-auto w-full max-w-3xl space-y-6 p-4 sm:p-8">
+  return <main className="league-page">
     <Link href="/organizador/calendario" className="underline">Volver al calendario</Link>
     <h1 className="text-2xl font-semibold">Subir contenido · Partido #{partidoId}</h1>
     <p>Hasta 30 archivos por partido. Fotos JPG/PNG hasta 5 MiB y videos MP4 hasta 50 MiB.</p>
     {total !== null && <p role="status">{total} {total === 1 ? "archivo activo" : "archivos activos"} · {Math.max(0, 30 - total)} espacios disponibles. El cupo se confirma al publicar.</p>}
-    {error && <p role="alert">{error}</p>}
-    <fieldset disabled={ocupado} className="min-w-0 space-y-4">
+    {error && <p role="alert" className="league-alert">{error}</p>}
+    <fieldset disabled={ocupado} className="league-card w-full">
       <legend className="font-semibold">Seleccionar contenido</legend>
       <label className="block">Archivos<input className="block w-full min-w-0 rounded border p-2" type="file" multiple accept=".jpg,.jpeg,.png,.mp4,image/jpeg,image/png,video/mp4" onChange={e => { seleccionar(Array.from(e.target.files ?? [])); e.target.value = ""; }} /></label>
       <label className="block">Descripción opcional<textarea className="block w-full rounded border p-2" value={descripcion} aria-invalid={!!validarDescripcionGaleria(descripcion)} onChange={e => setDescripcion(e.target.value)} /></label>
@@ -69,10 +69,10 @@ export function FormularioGaleria({ partidoId }: { partidoId: number }) {
     </fieldset>
     {!cola.length && <p>No has seleccionado archivos.</p>}
     <ul className="space-y-4" aria-label="Cola de archivos">
-      {cola.map(e => <li key={e.id} className="min-w-0 space-y-2 rounded border p-4">
+      {cola.map(e => <li key={e.id} className="league-card">
         <h2 className="break-all font-semibold">{e.archivo.name}</h2>
         <p className="break-all">{e.archivo.type || "Formato desconocido"} · {e.archivo.size < 1024 ? `${e.archivo.size} bytes` : e.archivo.size < 1024 * 1024 ? `${(e.archivo.size / 1024).toFixed(2)} KiB` : `${(e.archivo.size / 1024 / 1024).toFixed(2)} MiB`}</p>
-        <p role="status">{e.estado}{e.estado === "Subiendo" && (e.progreso === 100 ? " · Esperando confirmación del servidor" : ` · ${e.progreso}%`)}</p>
+        <p role="status">{e.estado}{e.estado === "Subiendo" && (e.progreso === 100 ? " · Esperando confirmación de la publicación" : ` · ${e.progreso}%`)}</p>
         {e.estado === "Subiendo" && <progress aria-label={`Progreso de ${e.archivo.name}`} max={100} value={e.progreso} className="w-full" />}
         {e.error && <p role="alert">{e.error}</p>}
         {e.contenidoId && <p className="break-all">Registro: {e.contenidoId}</p>}
@@ -81,7 +81,7 @@ export function FormularioGaleria({ partidoId }: { partidoId: number }) {
       </li>)}
     </ul>
     <div className="flex flex-wrap gap-3">
-      <button type="button" disabled={ocupado || !pendientes.length} onClick={() => void enviar(pendientes)} className="rounded border disabled:cursor-not-allowed disabled:opacity-50 px-4 py-2">{ocupado ? "Subiendo contenido..." : "Subir pendientes"}</button>
+      <button type="button" disabled={ocupado || !pendientes.length} onClick={() => void enviar(pendientes)} className="league-primary">{ocupado ? "Subiendo contenido..." : "Subir pendientes"}</button>
       <button type="button" disabled={ocupado || !fallidos.length} onClick={() => void enviar(fallidos)} className="rounded border disabled:cursor-not-allowed disabled:opacity-50 px-4 py-2">Reintentar fallidos</button>
     </div>
   </main>;

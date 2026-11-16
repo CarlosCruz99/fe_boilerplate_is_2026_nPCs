@@ -11,7 +11,7 @@ export default function VincularFichaPage() {
   return (
     <RutaProtegida rolesPermitidos={["JUGADOR"]}>
       <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md rounded-xl border border-zinc-200 p-6 dark:border-zinc-800">
+        <div className="auth-card w-full max-w-md">
           <h1 className="mb-4 text-2xl font-semibold">
             Vincular mi ficha
           </h1>

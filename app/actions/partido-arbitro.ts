@@ -33,7 +33,7 @@ async function apiArbitro<T>(
     if (!token) return { ok: false, status: 401, error: "La sesión expiró. Inicia sesión nuevamente." };
 
     const base = process.env.API_URL;
-    if (!base) return { ok: false, status: 503, error: "Falta configurar API_URL en el Frontend." };
+    if (!base) return { ok: false, status: 503, error: "El servicio no está disponible en este momento. Intenta más tarde." };
 
     const respuesta = await fetch(new URL(`partidos/${id}/${accion}`, base.replace(/\/?$/, "/")), {
       method: metodo,
@@ -66,7 +66,7 @@ async function apiArbitro<T>(
     return {
       ok: false,
       status: 503,
-      error: "No fue posible conectar con el Backend. Comprueba que esté levantado antes de reintentar.",
+      error: "No pudimos conectar con el servicio. Intenta nuevamente.",
     };
   }
 }
