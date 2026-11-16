@@ -394,6 +394,9 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
       </header>
 
       <div className="mt-6 flex flex-wrap gap-3">
+        <Link href={`/arbitro/partidos/${partidoId}/estadisticas`} className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-800">
+          Estadísticas del partido
+        </Link>
         <Link href="/arbitro/partidos" className="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-900">
           Cambiar de partido
         </Link>
