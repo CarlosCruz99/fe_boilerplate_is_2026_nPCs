@@ -1,0 +1,9 @@
+FE-9.1 / NPCS-29 — Nota técnica
+
+1. La consulta GET /partidos/:partidoId/estadisticas sí devuelve estado real, jugadores habilitados y registros.
+2. La autorización la valida el Backend: solo el árbitro asignado puede consultar o guardar.
+3. PUT /partidos/:partidoId/estadisticas/:jugadorId reemplaza los tres valores, únicamente con partido EN_CURSO.
+4. En FINALIZADO el formulario permite solo lectura; la corrección posterior se delega a H23.
+5. El contrato de H9 no devuelve los nombres de los equipos, cancha ni jornada; no se inventan esos datos en la UI.
+6. El GET lista jugadores inscritos en los equipos del partido en la temporada, no necesariamente la lista de participantes efectivos de BE-5.5. Para exigir exclusivamente jugadores participantes haría falta ajustar el contrato Backend.
+7. La interfaz no contiene diagramas, explicaciones de arquitectura ni documentación del wireframe.
