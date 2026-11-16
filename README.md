@@ -39,3 +39,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 La pantalla del capitán está en `/equipo/cuotas`.
 Contrato, validaciones y resultados de pruebas: [FE-13.1](docs/FE-13.1.md).
+
+## Publicación de galería H17
+
+Desde el calendario del organizador, **Subir contenido** abre el formulario de
+fotos/videos por partido. Contrato, límites, reintentos y evidencias:
+[FE-17.1](docs/FE-17.1.md).

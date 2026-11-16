@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import {
   cancelarPartido,
@@ -249,6 +250,7 @@ function ContenidoTemporada({
                           }[p.estado]
                         }
                       </p>
+                      <Link href={`/partidos/${p.id}/galeria/subir`} className="underline">Subir contenido</Link>
                       {p.estado === "PROGRAMADO" && (
                         <div className="league-row">
                           <button
