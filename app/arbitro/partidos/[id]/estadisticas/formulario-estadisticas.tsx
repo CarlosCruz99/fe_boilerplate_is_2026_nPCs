@@ -36,17 +36,15 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [jugadorId, setJugadorId] = useState<number | null>(null);
-  const [cantidades, setCantidades] = useState<CantidadesEstadistica>(vacio);
+  const [borrador, setBorrador] = useState<{ jugadorId: number | null; registro: RegistroEstadistica | undefined; cantidades: CantidadesEstadistica } | null>(null);
   const [mensaje, setMensaje] = useState<Mensaje | null>(null);
 
-  const cargar = useCallback(async () => {
-    if (!idValido) {
-      setCargando(false);
-      setMensaje({ error: true, texto: "El ID del partido no es válido." });
-      return;
-    }
-    setCargando(true);
-    const resultado = await consultarEstadisticasPartido(partidoId);
+  const consultar = useCallback((): Promise<Resultado<EstadisticasPartido>> => idValido
+    ? consultarEstadisticasPartido(partidoId)
+    : Promise.resolve({ ok: false, status: 400, error: "El número de partido no es válido." }), [idValido, partidoId]);
+
+  const aplicarResultado = useCallback((resultado: Resultado<EstadisticasPartido>) => {
+    setBorrador(null);
     if (resultado.ok) {
       setDatos(resultado.data);
       setMensaje(null);
@@ -60,9 +58,15 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
       setMensaje(mensajeError(resultado));
     }
     setCargando(false);
-  }, [idValido, partidoId]);
+  }, []);
 
-  useEffect(() => { void cargar(); }, [cargar]);
+  const cargar = useCallback(async () => aplicarResultado(await consultar()), [consultar, aplicarResultado]);
+
+  useEffect(() => {
+    let vigente = true;
+    void consultar().then((resultado) => { if (vigente) aplicarResultado(resultado); });
+    return () => { vigente = false; };
+  }, [consultar, aplicarResultado]);
 
   const seleccionado = useMemo(
     () => datos?.jugadoresHabilitados.find((jugador) => jugador.jugadorId === jugadorId) ?? null,
@@ -73,9 +77,9 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
     [datos, jugadorId],
   );
 
-  useEffect(() => {
-    setCantidades(valores(registroActual));
-  }, [registroActual, jugadorId]);
+  const cantidades = borrador?.jugadorId === jugadorId && borrador?.registro === registroActual
+    ? borrador.cantidades
+    : valores(registroActual);
 
   const editable = datos?.estado === "EN_CURSO" && !datos.resultadoOficial;
   const numerosValidos = Object.values(cantidades).every(
@@ -87,7 +91,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
     if (texto !== "" && !/^\d+$/.test(texto)) return;
     const numero = texto === "" ? NaN : Number(texto);
     if (texto !== "" && (!Number.isSafeInteger(numero) || numero > limite)) return;
-    setCantidades((actual) => ({ ...actual, [campo]: numero }));
+    setBorrador({ jugadorId, registro: registroActual, cantidades: { ...cantidades, [campo]: numero } });
     setMensaje(null);
   }
 
@@ -104,7 +108,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
           registros: [...anterior.registros.filter((registro) => registro.jugadorId !== resultado.data.jugadorId), resultado.data],
         };
       });
-      setCantidades(valores(resultado.data));
+      setBorrador(null);
       setMensaje({ error: false, texto: `Estadísticas de ${seleccionado.nombre} guardadas correctamente.` });
     } else {
       setMensaje(mensajeError(resultado));
@@ -118,7 +122,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
+    <main className="league-page">
       <Link href={`/arbitro/partidos/${idTexto}`} className="text-sm font-semibold text-teal-600 hover:underline dark:text-teal-300">← Volver al partido</Link>
       <p className="mt-8 text-sm font-bold tracking-wide text-teal-700 dark:text-teal-300">nPCs / Árbitro / Estadísticas</p>
       <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">Registro de estadísticas individuales por partido</h1>
@@ -133,7 +137,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
               Partido #{idTexto} {datos && <>· {mostrar(datos.estado)} · Árbitro asignado</>}
             </p>
           </div>
-          <button type="button" onClick={() => void cargar()} disabled={cargando || guardando} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100 disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800">Actualizar datos</button>
+          <button type="button" onClick={() => { setCargando(true); void cargar(); }} disabled={cargando || guardando} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100 disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800">Actualizar datos</button>
         </div>
 
         {cargando && <p role="status" className="mt-6 text-sm text-slate-600 dark:text-slate-300">Consultando estadísticas y jugadores habilitados…</p>}
@@ -143,7 +147,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Jugador
-                <select value={jugadorId ?? ""} onChange={(evento) => { setJugadorId(Number(evento.target.value)); setMensaje(null); }} disabled={guardando || datos.jugadoresHabilitados.length === 0} className={`${campo} mt-2`}>
+                <select value={jugadorId ?? ""} onChange={(evento) => { setJugadorId(Number(evento.target.value)); setBorrador(null); setMensaje(null); }} disabled={guardando || datos.jugadoresHabilitados.length === 0} className={`${campo} mt-2`}>
                   {datos.jugadoresHabilitados.length === 0 && <option value="">Sin jugadores habilitados</option>}
                   {datos.jugadoresHabilitados.map((jugador) => (
                     <option key={jugador.jugadorId} value={jugador.jugadorId}>{jugador.nombre} (#{jugador.jugadorId})</option>

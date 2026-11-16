@@ -31,7 +31,7 @@ async function apiEstadisticas<T>(
     const token = await getSession();
     if (!token) return { ok: false, status: 401, error: "La sesión ha expirado." };
     const apiUrl = process.env.API_URL;
-    if (!apiUrl) return { ok: false, status: 503, error: "Falta configurar API_URL." };
+    if (!apiUrl) return { ok: false, status: 503, error: "El servicio no está disponible en este momento. Intenta más tarde." };
 
     const ruta = `partidos/${partidoId}/estadisticas${jugadorId === undefined ? "" : `/${jugadorId}`}`;
     const respuesta = await fetch(new URL(ruta, apiUrl.replace(/\/?$/, "/")), {
@@ -57,7 +57,7 @@ async function apiEstadisticas<T>(
     }
     return { ok: true, data: (await respuesta.json()) as T };
   } catch {
-    return { ok: false, status: 503, error: "No fue posible conectar con el Backend. Verifica su estado." };
+    return { ok: false, status: 503, error: "No pudimos conectar con el servicio. Intenta nuevamente." };
   }
 }
 

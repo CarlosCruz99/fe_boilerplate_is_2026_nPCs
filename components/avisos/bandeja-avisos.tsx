@@ -42,8 +42,8 @@ export function BandejaAvisos({ seleccionInicialId = null, paginaInicial = 1 }: 
   }
 
   return (
-    <main className="w-full flex-1 bg-slate-50 px-4 py-8 text-slate-900 dark:bg-slate-950 dark:text-slate-100 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-7xl">
+    <main className="league-page">
+      <div className="w-full">
         <header className="mb-7 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold tracking-wide text-teal-700 dark:text-teal-300">NPCS · LIGA</p>
@@ -71,11 +71,11 @@ export function BandejaAvisos({ seleccionInicialId = null, paginaInicial = 1 }: 
             ) : (
               <>
                 {datos.length === 0 ? <p role="status" className="rounded-lg bg-slate-50 p-4">No hay avisos en esta página.</p> : (
-                  <ul className="space-y-3">
+                  <ul className="notice-list space-y-3" tabIndex={0} aria-label="Avisos recibidos">
                     {datos.map((aviso) => (
                       <li key={aviso.id}>
                         <button type="button" onClick={() => setSeleccion(aviso.id)} aria-current={seleccionado === aviso.id ? "true" : undefined}
-                          className={`w-full rounded-xl border p-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${seleccionado === aviso.id ? "border-blue-400 bg-white ring-1 ring-blue-200 dark:border-blue-500 dark:bg-slate-800" : !aviso.leidoEn ? "border-blue-200 bg-blue-50 hover:border-blue-400 dark:border-blue-900 dark:bg-blue-950/40" : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"}`}>
+                          className={`notice-item w-full rounded-xl border p-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${seleccionado === aviso.id ? "border-blue-400 bg-white ring-1 ring-blue-200 dark:border-blue-500 dark:bg-slate-800" : !aviso.leidoEn ? "border-blue-200 bg-blue-50 hover:border-blue-400 dark:border-blue-900 dark:bg-blue-950/40" : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"}`}>
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <EtiquetaModulo modulo={aviso.moduloOrigen} />
                             {!aviso.leidoEn && <span className="text-xs font-bold text-blue-700 dark:text-blue-300">Sin leer</span>}

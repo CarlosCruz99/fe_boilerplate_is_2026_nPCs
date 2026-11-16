@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import type { Rol } from "@/types/auth";
 
@@ -38,7 +39,7 @@ export function RutaProtegida({
 
   if (estado === "error") {
     return (
-      <div className="flex flex-col items-start gap-4 p-6">
+      <div className="league-page">
         <p role="alert">{mensaje}</p>
 
         <button
@@ -69,9 +70,13 @@ export function RutaProtegida({
 
   if (!rolPermitido || !cumpleCapitania) {
     return (
-      <p role="alert" className="p-6">
-        No tienes permiso para ver esta página.
-      </p>
+      <main className="league-page">
+        <section className="league-card">
+          <h1>Esta sección tiene acceso restringido</h1>
+          <p role="alert">No tienes permiso para ver esta página.</p>
+          <Link href="/" className="league-link league-primary">Volver al inicio</Link>
+        </section>
+      </main>
     );
   }
 
