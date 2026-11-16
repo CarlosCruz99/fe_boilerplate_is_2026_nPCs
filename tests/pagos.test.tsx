@@ -62,3 +62,16 @@ it("bloquea envíos repetidos mientras espera confirmación", async () => {
   resolver({ ok: false, status: 503, error: "Sin conexión" });
   await screen.findByText("Sin conexión");
 });
+it("recupera el pago con la misma clave aunque actualizar cuotas haya reservado su monto", async () => {
+  vi.mocked(registrarPago).mockResolvedValueOnce({ ok: false, status: 503, error: "Respuesta perdida" }).mockResolvedValueOnce({ ok: true, data: { id: 100, cuotaId: 1, monto: "10.00", fechaPago: "2026-01-01", estado: "PENDIENTE", saldo: "80.00", disponible: "0.00", advertencia: "El pago se registró, pero no se pudo enviar el aviso." } });
+  await llenar();
+  fireEvent.submit(screen.getByRole("button", { name: "Registrar pago" }).closest("form")!);
+  await screen.findByText("Respuesta perdida");
+  vi.mocked(consultarCuotasPago).mockResolvedValue({ ok: true, data: { cuotas: [{ ...cuota, disponible: "0.00" }] } });
+  fireEvent.click(screen.getByRole("button", { name: "Actualizar cuotas" }));
+  await waitFor(() => expect(screen.getByRole("button", { name: "Registrar pago" })).not.toBeDisabled());
+  fireEvent.click(screen.getByRole("button", { name: "Registrar pago" }));
+  await screen.findByText("Número de registro: 100");
+  expect(screen.getByText("El pago se registró, pero no se pudo enviar el aviso.")).toBeInTheDocument();
+  expect(vi.mocked(registrarPago).mock.calls[0][2]).toBe(vi.mocked(registrarPago).mock.calls[1][2]);
+});

@@ -2,7 +2,7 @@
 import { obtenerSesion } from "@/app/actions/session";
 import { equiposApi } from "@/lib/equipos-api";
 import { validarPago } from "@/lib/pagos-validation";
-import type { Resultado } from "@/types/equipos";
+import type { Equipo, Temporada, Resultado } from "@/types/equipos";
 import type { CuotaPago, PagoRegistrado } from "@/types/pagos";
 async function capitan() {
   const sesion = await obtenerSesion();
@@ -11,7 +11,20 @@ async function capitan() {
 export async function consultarCuotasPago(): Promise<Resultado<{ cuotas: CuotaPago[] }>> {
   const equipoId = await capitan();
   if (!equipoId) return { ok: false, status: 403, error: "No tienes permiso para ver esta página." };
-  return equiposApi("JUGADOR", `equipos/${equipoId}/cuotas`);
+  // AuthContext representa un equipo concreto; resolver su temporada sin asumir
+  // que corresponde a la temporada marcada como actual.
+  const temporadas = await equiposApi<Temporada[]>("JUGADOR", "temporadas");
+  if (!temporadas.ok) return temporadas;
+  for (const temporada of temporadas.data) {
+    const equipo = await equiposApi<Equipo>("JUGADOR", `equipos/mi-equipo?temporadaId=${temporada.id}`);
+    if (!equipo.ok) {
+      if (equipo.status === 404) continue;
+      return equipo;
+    }
+    if (equipo.data.id === equipoId)
+      return equiposApi("JUGADOR", `equipos/${equipoId}/cuotas?temporadaId=${equipo.data.temporadaId}`);
+  }
+  return { ok: false, status: 404, error: "No se encontró la temporada del equipo que capitaneas." };
 }
 export async function registrarPago(cuotaId: number, datos: FormData, clave: string): Promise<Resultado<PagoRegistrado>> {
   if (!await capitan()) return { ok: false, status: 403, error: "No tienes permiso para ver esta página." };

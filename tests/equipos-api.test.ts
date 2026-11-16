@@ -149,3 +149,7 @@ describe("Fotografía privada", () => {
     expect(Buffer.from(await res.arrayBuffer())).toEqual(png);
   });
 });
+it("conserva mensaje de conflicto de disponible de BE-13.1", async () => {
+  fetchMock.mockResolvedValue(Response.json({ mensaje: "El monto supera el disponible de la cuota.", disponible: "0.00" }, { status: 409 }));
+  expect(await equiposApi("JUGADOR", "cuotas/1/pagos")).toMatchObject({ ok: false, status: 409, error: "El monto supera el disponible de la cuota." });
+});

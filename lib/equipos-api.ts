@@ -41,7 +41,7 @@ export async function equiposApi<T>(
       const body = await res.json().catch(() => ({}));
       const message = Array.isArray(body.message)
         ? body.message.join(" ")
-        : body.message;
+        : body.message ?? body.mensaje;
       return {
         ok: false,
         status: res.status,
