@@ -11,6 +11,7 @@ import {
 import { ErrorConsulta, MarcoEquipos } from "@/components/equipos/ui";
 import { ConfirmacionCalendario } from "@/components/calendario/confirmacion";
 import { FormularioGeneracion } from "@/components/calendario/formulario-generacion";
+import { AsignacionArbitro } from "@/components/calendario/asignacion-arbitro";
 import { FormularioPartido } from "@/components/calendario/formulario-partido";
 import { useConsulta } from "@/hooks/use-consulta";
 import { mostrarFecha } from "@/lib/calendario-validation";
@@ -238,7 +239,17 @@ function ContenidoTemporada({
                       <p>Inicio: {mostrarFecha(p.inicio)}</p>
                       <p>Fin: {mostrarFecha(p.fin)}</p>
                       <p>Cancha: {p.cancha.nombre}</p>
-                      <p>Árbitro: {p.arbitro.nombre}</p>
+                      <AsignacionArbitro
+                        partidoId={p.id}
+                        estado={p.estado}
+                        actual={p.arbitro ?? null}
+                        ocupado={ocupado}
+                        bloquear={bloquear}
+                        guardado={(datos) => {
+                          setAviso(`Árbitro asignado: ${datos.arbitroNombre}.`);
+                          calendario.recargar();
+                        }}
+                      />
                       <p>
                         Estado:{" "}
                         {
