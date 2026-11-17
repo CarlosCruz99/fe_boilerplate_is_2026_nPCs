@@ -1,4 +1,6 @@
 "use server";
+
+import { obtenerSesion } from "@/app/actions/session";
 import { calendarioApi } from "@/lib/calendario-api";
 import { idValido } from "@/lib/equipos-validation";
 import {
@@ -28,10 +30,12 @@ export async function catalogosCalendario(
   temporadaId: number,
 ): Promise<Resultado<CatalogosCalendario>> {
   if (!idValido(temporadaId)) return invalido();
+  const sesion = await obtenerSesion();
+  const consultar = <T,>(path: string) => calendarioApi<T>(path, {}, undefined, sesion);
   const [canchas, arbitros, primera] = await Promise.all([
-    calendarioApi<Cancha[]>("canchas?activa=true"),
-    calendarioApi<Arbitro[]>("arbitros"),
-    calendarioApi<PaginaEquipos>(
+    consultar<Cancha[]>("canchas?activa=true"),
+    consultar<Arbitro[]>("arbitros"),
+    consultar<PaginaEquipos>(
       `equipos?temporadaId=${temporadaId}&estado=INSCRITO&page=1&pageSize=50`,
     ),
   ]);
@@ -40,7 +44,7 @@ export async function catalogosCalendario(
   if (!primera.ok) return primera;
   const equipos = [...primera.data.items];
   for (let page = 2; (page - 1) * 50 < primera.data.total; page++) {
-    const siguiente = await calendarioApi<PaginaEquipos>(
+    const siguiente = await consultar<PaginaEquipos>(
       `equipos?temporadaId=${temporadaId}&estado=INSCRITO&page=${page}&pageSize=50`,
     );
     if (!siguiente.ok) return siguiente;

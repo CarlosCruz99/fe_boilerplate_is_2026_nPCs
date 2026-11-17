@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { FixtureCard } from "@/components/calendario/fixture-card";
 import { useCallback, useRef, useState } from "react";
 import {
   cancelarPartido,
@@ -103,10 +104,12 @@ function ContenidoTemporada({
   const [publicacion, setPublicacion] = useState<JornadaOrganizador | null>(
     null,
   );
+  const [jornadaSeleccionada, setJornadaSeleccionada] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState("");
   const lectura = calendario.resultado;
   const jornadas = lectura?.ok ? lectura.data.jornadas : [];
+  const jornadaVisible = jornadas.find(j => j.id === jornadaSeleccionada) ?? jornadas[0];
   const noGenerar =
     !lectura?.ok ||
     jornadas.some(
@@ -186,110 +189,29 @@ function ContenidoTemporada({
           el primer partido.
         </p>
       ) : (
-        <section className="league-stack" aria-label="Jornadas del calendario">
-          {jornadas.map((j) => (
-            <details
-              key={j.id}
-              className="league-card calendar-jornada"
-              open={j.numero === jornadas[0].numero}
-            >
-              <summary>
-                Jornada {j.numero} ·{" "}
-                {j.estado === "BORRADOR" ? "Borrador" : "Publicada"} ·{" "}
-                {j.partidos.filter((p) => p.estado !== "CANCELADO").length}{" "}
-                partidos
-              </summary>
-              <div className="league-row">
-                <p>
-                  Estado de la jornada:{" "}
-                  <strong>
-                    {j.estado === "BORRADOR" ? "Borrador" : "Publicada"}
-                  </strong>
-                </p>
-                {j.publicadaEn && (
-                  <p>Publicada el {mostrarFecha(j.publicadaEn)}</p>
-                )}
-                {j.estado === "BORRADOR" && (
-                  <button
-                    disabled={
-                      ocupado ||
-                      !j.partidos.some((p) => p.estado !== "CANCELADO")
-                    }
-                    onClick={() => {
-                      setPublicacion(j);
-                      setError("");
-                    }}
-                  >
-                    Publicar jornada {j.numero}
-                  </button>
-                )}
-              </div>
-              {!j.partidos.length ? (
-                <p>Esta jornada no tiene partidos.</p>
-              ) : (
-                <ul
-                  className="league-grid"
-                  aria-label={`Partidos de la jornada ${j.numero}`}
-                >
-                  {j.partidos.map((p) => (
-                    <li className="league-card" key={p.id}>
-                      <h3>
-                        {p.local.nombre} vs. {p.visitante.nombre}
-                      </h3>
-                      <p>Inicio: {mostrarFecha(p.inicio)}</p>
-                      <p>Fin: {mostrarFecha(p.fin)}</p>
-                      <p>Cancha: {p.cancha.nombre}</p>
-                      <AsignacionArbitro
-                        partidoId={p.id}
-                        estado={p.estado}
-                        actual={p.arbitro ?? null}
-                        ocupado={ocupado}
-                        bloquear={bloquear}
-                        guardado={(datos) => {
-                          setAviso(`Árbitro asignado: ${datos.arbitroNombre}.`);
-                          calendario.recargar();
-                        }}
-                      />
-                      <p>
-                        Estado:{" "}
-                        {
-                          {
-                            PROGRAMADO: "Programado",
-                            EN_CURSO: "En curso",
-                            FINALIZADO: "Finalizado",
-                            CANCELADO: "Cancelado",
-                          }[p.estado]
-                        }
-                      </p>
-                      <Link href={`/partidos/${p.id}/galeria/subir`} className="underline">Subir contenido</Link>
-                      {p.estado === "PROGRAMADO" && (
-                        <div className="league-row">
-                          <button
-                            disabled={ocupado || !catalogos.resultado?.ok}
-                            onClick={() => {
-                              setEdicion(p);
-                              setAviso("");
-                            }}
-                          >
-                            Reprogramar partido {p.id}
-                          </button>
-                          <button
-                            disabled={ocupado}
-                            onClick={() => {
-                              setCancelacion(p);
-                              setError("");
-                            }}
-                          >
-                            Cancelar partido {p.id}
-                          </button>
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </details>
-          ))}
+        <section className="fixtures-panel" aria-label="Jornadas del calendario">
+          <div className="fixtures-heading"><div><p className="fixture-kicker">LA LIGA, JORNADA A JORNADA</p><h2>PARTIDOS DE LA TEMPORADA</h2></div><span>HORARIO DE EL SALVADOR</span></div>
+          <nav className="fixture-rounds" aria-label="Seleccionar jornada">
+            {jornadas.map(j => <button key={j.id} type="button" aria-pressed={j.id === jornadaVisible.id} disabled={ocupado} onClick={() => setJornadaSeleccionada(j.id)}>
+              Jornada {j.numero} · {j.estado === "BORRADOR" ? "Borrador" : "Publicada"} · {j.partidos.filter(p => p.estado !== "CANCELADO").length} partidos
+            </button>)}
+          </nav>
+          <div className="fixture-round-info">
+            <p>Estado de la jornada: <strong>{jornadaVisible.estado === "BORRADOR" ? "Borrador" : "Publicada"}</strong>{jornadaVisible.publicadaEn && ` · Publicada el ${mostrarFecha(jornadaVisible.publicadaEn)}`}</p>
+            {jornadaVisible.estado === "BORRADOR" && <button disabled={ocupado || !jornadaVisible.partidos.some(p => p.estado !== "CANCELADO")} onClick={() => { setPublicacion(jornadaVisible); setError(""); }}>Publicar jornada {jornadaVisible.numero}</button>}
+          </div>
+          {!jornadaVisible.partidos.length ? <p>Esta jornada no tiene partidos.</p> : <ul className="fixtures-grid" aria-label={`Partidos de la jornada ${jornadaVisible.numero}`}>
+            {jornadaVisible.partidos.map(p => <li key={p.id}>
+              <FixtureCard id={p.id} inicio={p.inicio} local={p.local} visitante={p.visitante} cancha={p.cancha.nombre} estado={p.estado}
+                footer={<AsignacionArbitro partidoId={p.id} estado={p.estado} actual={p.arbitro ?? null} ocupado={ocupado} bloquear={bloquear} guardado={datos => { setAviso(`Árbitro asignado: ${datos.arbitroNombre}.`); calendario.recargar(); }} />}>
+                <Link href={`/partidos/${p.id}/galeria/subir`}><span aria-hidden="true">▧</span> Galería</Link>
+                {p.estado === "PROGRAMADO" && <>
+                  <button aria-label={`Reprogramar partido ${p.id}`} disabled={ocupado || !catalogos.resultado?.ok} onClick={() => { setEdicion(p); setAviso(""); document.getElementById("calendar-editor")?.scrollIntoView?.({ block: "start" }); }}><span aria-hidden="true">↗</span> Reprogramar</button>
+                  <button aria-label={`Cancelar partido ${p.id}`} disabled={ocupado} onClick={() => { setCancelacion(p); setError(""); }}><span aria-hidden="true">×</span> Cancelar</button>
+                </>}
+              </FixtureCard>
+            </li>)}
+          </ul>}
         </section>
       )}
       {!catalogos.resultado ? (
@@ -333,6 +255,7 @@ function ContenidoTemporada({
               calendario.recargar();
             }}
           />
+          <div id="calendar-editor" className="league-stack">
           <FormularioPartido
             key={edicion?.id ?? "nuevo"}
             temporadaId={temporadaId}
@@ -347,6 +270,7 @@ function ContenidoTemporada({
               calendario.recargar();
             }}
           />
+          </div>
         </>
       )}
       {cancelacion && (

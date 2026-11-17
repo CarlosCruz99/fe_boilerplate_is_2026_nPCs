@@ -8,6 +8,7 @@ import type {
   FinPartido,
   InicioPartido,
   MarcadorPartido,
+  MesaPartido,
   ParticipantesPartido,
 } from "@/types/partido-arbitro";
 
@@ -18,7 +19,7 @@ const invalido = (error: string): Resultado<never> => ({ ok: false, status: 400,
 async function apiArbitro<T>(
   id: number,
   accion: string,
-  metodo: "POST" | "PUT" | "PATCH",
+  metodo: "GET" | "POST" | "PUT" | "PATCH",
   body?: object,
 ): Promise<Resultado<T>> {
   if (!idCorrecto(id)) return invalido("El ID del partido debe ser un entero positivo válido.");
@@ -97,4 +98,8 @@ export async function guardarParticipantesArbitro(
 
 export async function finalizarPartidoArbitro(id: number): Promise<Resultado<FinPartido>> {
   return apiArbitro(id, "finalizar", "POST");
+}
+
+export async function consultarMesaArbitro(id: number): Promise<Resultado<MesaPartido>> {
+  return apiArbitro(id, "mesa", "GET");
 }

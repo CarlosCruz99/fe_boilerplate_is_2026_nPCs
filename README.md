@@ -50,3 +50,11 @@ fotos/videos por partido. Contrato, límites, reintentos y evidencias:
 
 El organizador puede cambiar el árbitro de un partido programado desde su detalle
 en el calendario. Contrato y resultados de QA: [FE-25.1](docs/FE-25.1.md).
+
+## Diseño inmersivo de fútbol
+
+Login, registro y herramientas de la liga comparten el diseño Matchday: escenarios originales de estadio, transiciones y movimiento con pausa accesible. Cambios, corrección de la mesa del árbitro y evidencia de validación: [refactor Matchday](docs/refactor-matchday.md).
+
+## Rendimiento y calendario por tarjetas
+
+El calendario sigue la referencia de tarjetas, con selección de jornadas, fondos fotográficos reales y video de entrenamiento bajo demanda. Mediciones antes/después, fuentes y validación: [optimización del calendario](docs/optimizacion-calendario.md).

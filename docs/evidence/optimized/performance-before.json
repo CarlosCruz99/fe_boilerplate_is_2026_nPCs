@@ -1,0 +1,39 @@
+{
+  "runs": [
+    {
+      "start": 1337.3999999994412,
+      "requests": 0,
+      "loading": 1,
+      "elapsed": 294.70000000018626,
+      "nodes": 1167,
+      "blur": 1,
+      "ready": true,
+      "posts": 4
+    },
+    {
+      "start": 1222.3999999994412,
+      "requests": 0,
+      "loading": 1,
+      "elapsed": 245.1000000005588,
+      "nodes": 1171,
+      "blur": 1,
+      "ready": true,
+      "posts": 4
+    },
+    {
+      "start": 1218.5,
+      "requests": 0,
+      "loading": 1,
+      "elapsed": 239.59999999962747,
+      "nodes": 1171,
+      "blur": 1,
+      "ready": true,
+      "posts": 4
+    }
+  ],
+  "idle4s": {
+    "task": 0.070967,
+    "layout": 0.001433,
+    "style": 0.011757
+  }
+}

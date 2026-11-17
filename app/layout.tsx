@@ -4,7 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { AuthProvider } from "@/contexts/auth-context";
 
 export const metadata: Metadata = {
-  title: { default: "nPCs · Liga amateur", template: "%s | nPCs" },
+  title: { default: "Strikers by NPCs", template: "%s | Strikers by NPCs" },
   description: "Gestiona tu liga: equipos, partidos, estadísticas y pagos en un solo lugar.",
 };
 

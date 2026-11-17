@@ -124,7 +124,7 @@ export function FormularioEstadisticas({ idTexto }: { idTexto: string }) {
   return (
     <main className="league-page">
       <Link href={`/arbitro/partidos/${idTexto}`} className="text-sm font-semibold text-teal-600 hover:underline dark:text-teal-300">← Volver al partido</Link>
-      <p className="mt-8 text-sm font-bold tracking-wide text-teal-700 dark:text-teal-300">nPCs / Árbitro / Estadísticas</p>
+      <p className="mt-8 text-sm font-bold tracking-wide text-teal-700 dark:text-teal-300">Strikers by NPCs / Árbitro / Estadísticas</p>
       <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">Registro de estadísticas individuales por partido</h1>
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Consulta y registra los goles, asistencias y tarjetas de cada jugador habilitado.</p>
       <div className="my-6 h-px bg-slate-300 dark:bg-slate-700" />

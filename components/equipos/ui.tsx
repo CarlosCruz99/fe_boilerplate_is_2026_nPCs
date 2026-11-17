@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Fotos privadas y vistas previas sin optimización intermedia. */
 "use client";
+import { EscudoEquipo } from "@/components/equipos/escudo-equipo";
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Equipo, Temporada } from "@/types/equipos";
@@ -67,7 +68,7 @@ export function SelectorTemporada({
 export function EstadoInscripcion({ equipo }: { equipo: Equipo }) {
   return (
     <section className="league-card">
-      <h2>{equipo.nombre}</h2>
+      <h2 className="equipo-con-escudo"><EscudoEquipo nombre={equipo.nombre} id={equipo.id} />{equipo.nombre}</h2>
       <p>
         Estado:{" "}
         <strong>

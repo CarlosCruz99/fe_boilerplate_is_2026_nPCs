@@ -208,6 +208,7 @@ describe("H3 servidor", () => {
       ]),
     );
     expect(urls).toHaveLength(3);
+    expect(obtenerSesion).toHaveBeenCalledTimes(1);
   });
   it("rechaza generación inválida antes de enviar", async () => {
     expect(

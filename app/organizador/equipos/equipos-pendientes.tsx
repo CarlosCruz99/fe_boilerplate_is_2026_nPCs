@@ -1,4 +1,5 @@
 "use client";
+import { EscudoEquipo } from "@/components/equipos/escudo-equipo";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   consultarDetalle,
@@ -81,7 +82,7 @@ function ListaPendientes({ temporadaId }: { temporadaId: number }) {
             <ul className="league-grid">
               {resultado.data.items.map((e) => (
                 <li key={e.id} className="league-card">
-                  <h2>{e.nombre}</h2>
+                  <h2 className="equipo-con-escudo"><EscudoEquipo nombre={e.nombre} id={e.id} />{e.nombre}</h2>
                   <p>Capitán: {e.nombreCapitan}</p>
                   <p>{e.totalJugadores} jugadores</p>
                   <p>
@@ -245,7 +246,7 @@ function DetalleEquipo({
 function DatosDetalle({ equipo }: { equipo: EquipoDetalle }) {
   return (
     <>
-      <h2>{equipo.nombre}</h2>
+      <h2 className="equipo-con-escudo"><EscudoEquipo nombre={equipo.nombre} id={equipo.id} />{equipo.nombre}</h2>
       <p>Capitán: {equipo.nombreCapitan}</p>
       <p>{equipo.jugadores.length} jugadores</p>
       {equipo.jugadores.length < 7 && (

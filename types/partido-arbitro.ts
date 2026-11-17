@@ -33,3 +33,13 @@ export type ParticipantesPartido = {
   local: Participante[];
   visitante: Participante[];
 };
+
+export type MesaPartido = MarcadorPartido & {
+  partidoId: number;
+  estado: "PROGRAMADO" | "EN_CURSO" | "FINALIZADO" | "CANCELADO";
+  local: { id: number; nombre: string };
+  visitante: { id: number; nombre: string };
+  inicioReal: string | null;
+  finReal: string | null;
+  participantes: ParticipantesPartido;
+};

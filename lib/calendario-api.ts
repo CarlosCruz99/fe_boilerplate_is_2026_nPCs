@@ -1,4 +1,5 @@
 import { obtenerSesion } from "@/app/actions/session";
+import type { ResultadoSesion } from "@/types/auth";
 import { getSession } from "@/lib/session";
 import type { Resultado } from "@/types/equipos";
 
@@ -23,9 +24,10 @@ export async function calendarioApi<T>(
   path: string,
   init: RequestInit = {},
   fallback = "No pudimos consultar los datos del calendario. Intenta de nuevo.",
+  sesionVerificada?: ResultadoSesion,
 ): Promise<Resultado<T>> {
   try {
-    const sesion = await obtenerSesion();
+    const sesion = sesionVerificada ?? await obtenerSesion();
     if (sesion.estado === "error")
       return { ok: false, status: 503, error: sesion.mensaje };
     if (sesion.estado !== "autenticado")

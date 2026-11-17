@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useRef,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -28,7 +29,7 @@ type AuthContextValue = {
 };
 
 type LecturaSesion = {
-  ruta: string;
+  ambito: object;
   resultado: ResultadoSesion;
 };
 
@@ -36,36 +37,53 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const publica = pathname === "/login" || pathname === "/registro";
+  // La identidad cambia solo al entrar/salir del acceso público, no en cada menú.
+  const ambito = useMemo(() => ({ publica }), [publica]);
   const [lectura, setLectura] = useState<LecturaSesion | null>(null);
-
-  const peticion = useRef<Promise<ResultadoSesion> | null>(null);
+  const peticion = useRef<{ ambito: object; promesa: Promise<ResultadoSesion> } | null>(null);
 
   const actualizarSesion = useCallback(async () => {
-    // Las llamadas simultáneas de este proveedor comparten una petición.
-    if (!peticion.current) {
-      peticion.current = obtenerSesion()
-        .catch(
-          (): ResultadoSesion => ({
-            estado: "error",
-            mensaje: "No pudimos comprobar tu sesión. Intenta nuevamente.",
-          }),
-        )
-        .finally(() => {
-          peticion.current = null;
-        });
+    if (ambito.publica) return;
+    if (peticion.current?.ambito !== ambito) {
+      peticion.current = {
+        ambito,
+        promesa: obtenerSesion().catch((): ResultadoSesion => ({
+          estado: "error", mensaje: "No pudimos comprobar tu sesión. Intenta nuevamente.",
+        })),
+      };
     }
-
-    const resultado = await peticion.current;
-    setLectura({ ruta: pathname, resultado });
-  }, [pathname]);
+    const solicitud = peticion.current;
+    const resultado = await solicitud.promesa;
+    // Una respuesta anterior a un cambio de cuenta no puede reemplazar la nueva.
+    if (peticion.current === solicitud) {
+      setLectura(anterior =>
+        resultado.estado === "error" && anterior?.ambito === ambito && anterior.resultado.estado === "autenticado"
+          ? anterior // Un fallo transitorio al revalidar no desmonta formularios en uso.
+          : { ambito, resultado },
+      );
+      peticion.current = null;
+    }
+  }, [ambito]);
 
   useEffect(() => {
     void actualizarSesion();
-  }, [actualizarSesion]);
+    if (publica) return;
+    const revisar = () => { if (document.visibilityState === "visible") void actualizarSesion(); };
+    const intervalo = window.setInterval(revisar, 60_000);
+    window.addEventListener("focus", revisar);
+    document.addEventListener("visibilitychange", revisar);
+    return () => {
+      window.clearInterval(intervalo);
+      window.removeEventListener("focus", revisar);
+      document.removeEventListener("visibilitychange", revisar);
+    };
+  }, [publica, actualizarSesion]);
 
-  // Al cambiar de página, esperamos la consulta de esa ruta.
-  const resultado =
-    lectura?.ruta === pathname ? lectura.resultado : null;
+  // La UI conserva la sesión mientras se navega. Cada acción sigue autorizándose
+  // en el servidor; este estado no es una caché de permisos de la API.
+  const resultado: ResultadoSesion | null = publica ? { estado: "sin-sesion" }
+    : lectura?.ambito === ambito ? lectura.resultado : null;
 
   const usuario =
     resultado?.estado === "autenticado" ? resultado.usuario : null;
