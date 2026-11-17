@@ -8,8 +8,9 @@ export const metadata: Metadata = {
 
 export default function RegistroPage() {
   return (
-    <main className="flex flex-1 items-center justify-center px-4 py-8">
-      <div className="auth-card w-full max-w-md">
+    <main className="auth-layout auth-register">
+      <section className="auth-story"><p className="eyebrow">EL SIGUIENTE CAPÍTULO ES TUYO</p><h1>EL FÚTBOL<br />SE JUEGA<br /><em>EN EQUIPO.</em></h1><p>Hazte parte de la liga.<br />La cancha te está esperando.</p></section>
+      <div className="auth-card w-full">
         <p className="eyebrow">Forma parte de la liga</p>
         <h1 className="mb-6 text-2xl font-semibold">
           Crear cuenta

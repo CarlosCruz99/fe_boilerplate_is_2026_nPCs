@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "name": "Inicio carga fotografía real y no descarga video automáticamente",
+      "ok": true
+    },
+    {
+      "name": "Video real se reproduce al activarlo",
+      "ok": true
+    },
+    {
+      "name": "Pausa detiene el video",
+      "ok": true
+    },
+    {
+      "name": "Reanudar vuelve a reproducir",
+      "ok": true
+    },
+    {
+      "name": "Movimiento reducido impide activar el video",
+      "ok": true
+    },
+    {
+      "name": "Créditos incluyen autores y licencias",
+      "ok": true
+    },
+    {
+      "name": "Herramientas retiran el video y mantienen el fondo estático",
+      "ok": true
+    },
+    {
+      "name": "Calendario monta solo seis partidos de la jornada seleccionada",
+      "ok": true
+    },
+    {
+      "name": "Selector de jornada cambia las tarjetas",
+      "ok": true
+    },
+    {
+      "name": "Cambiar jornada no solicita datos adicionales",
+      "ok": true
+    },
+    {
+      "name": "Catálogo real del árbitro disponible",
+      "ok": true
+    },
+    {
+      "name": "Reprogramación conserva el partido y sus campos",
+      "ok": true
+    },
+    {
+      "name": "Tarjetas sin desbordamiento en móvil",
+      "ok": true
+    },
+    {
+      "name": "Calendario del equipo usa tarjetas",
+      "ok": true
+    },
+    {
+      "name": "Filtro del equipo muestra su encuentro",
+      "ok": true
+    },
+    {
+      "name": "Detalle conserva cancha y ambos equipos",
+      "ok": true
+    },
+    {
+      "name": "Detalle sin desbordamiento en móvil",
+      "ok": true
+    },
+    {
+      "name": "Video admite lectura parcial sin sesión",
+      "ok": true
+    },
+    {
+      "name": "No se solicitan los fondos generados anteriores",
+      "ok": true
+    }
+  ],
+  "errors": []
+}

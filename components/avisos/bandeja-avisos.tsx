@@ -46,7 +46,7 @@ export function BandejaAvisos({ seleccionInicialId = null, paginaInicial = 1 }: 
       <div className="w-full">
         <header className="mb-7 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold tracking-wide text-teal-700 dark:text-teal-300">NPCS · LIGA</p>
+            <p className="text-xs font-semibold tracking-wide text-teal-700 dark:text-teal-300">Strikers by NPCs</p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Bandeja de avisos</h1>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 sm:text-base">Consulta los avisos de calendario, pagos y resultados.</p>
           </div>

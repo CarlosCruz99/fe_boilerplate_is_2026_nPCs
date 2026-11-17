@@ -130,7 +130,7 @@ export function FormularioCuota() {
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="border-b border-slate-300 pb-6 dark:border-slate-700">
           <Link href="/" className="text-sm font-semibold text-teal-800 underline-offset-4 hover:underline dark:text-teal-300">← Volver al inicio</Link>
-          <p className="mt-6 text-sm font-bold tracking-wider text-teal-800 dark:text-teal-300">nPCs / Administración / Cuotas</p>
+          <p className="mt-6 text-sm font-bold tracking-wider text-teal-800 dark:text-teal-300">Strikers by NPCs / Administración / Cuotas</p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Cuotas de la liga</h1>
         </header>
 

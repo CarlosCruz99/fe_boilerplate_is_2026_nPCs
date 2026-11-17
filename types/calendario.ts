@@ -17,6 +17,7 @@ export type PartidoCalendario = PartidoComun & {
 };
 export type CalendarioEquipo = {
   equipoId: number;
+  nombreEquipo?: string;
   total: number;
   partidos: PartidoCalendario[];
 };

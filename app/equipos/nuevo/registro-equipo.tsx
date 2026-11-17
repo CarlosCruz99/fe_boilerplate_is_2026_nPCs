@@ -1,4 +1,5 @@
 "use client";
+import { EscudoEquipo } from "@/components/equipos/escudo-equipo";
 import { useCallback, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -128,6 +129,9 @@ function RegistroTemporada({ temporada }: { temporada: Temporada }) {
           onChange={(e) => setNombre(e.target.value)}
         />
       </label>
+      {nombre.trim().length >= 3 && (
+        <div className="equipo-con-escudo"><EscudoEquipo nombre={nombre.trim()} /> Vista previa del escudo</div>
+      )}
       {error && <ErrorConsulta mensaje={error} />}
       <button className="league-primary" disabled={enviando}>
         {enviando ? "Registrando..." : "Registrar equipo"}

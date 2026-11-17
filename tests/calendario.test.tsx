@@ -204,6 +204,12 @@ describe("FE-3.1 calendario", () => {
     expect(
       screen.queryByRole("button", { name: "Publicar jornada 1" }),
     ).not.toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Partidos de la jornada 1" }).children).toHaveLength(6);
+    expect(screen.queryByRole("button", { name: "Reprogramar partido 7" })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Jornada 2 · Borrador · 6 partidos" }));
+    expect(screen.getByRole("list", { name: "Partidos de la jornada 2" }).children).toHaveLength(6);
+    expect(screen.queryByRole("button", { name: "Reprogramar partido 1" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reprogramar partido 7" })).toBeEnabled();
     vista.unmount();
     render(<CalendarioOrganizador />);
     expect(

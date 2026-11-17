@@ -1,17 +1,19 @@
 "use client";
 
+import { EscudoEquipo } from "@/components/equipos/escudo-equipo";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
+  consultarMesaArbitro,
   actualizarMarcadorArbitro,
   finalizarPartidoArbitro,
   guardarParticipantesArbitro,
   iniciarPartidoArbitro,
 } from "@/app/actions/partido-arbitro";
 import type { Resultado } from "@/types/equipos";
-import type { MarcadorPartido, ParticipantesPartido } from "@/types/partido-arbitro";
+import type { MarcadorPartido, MesaPartido, ParticipantesPartido } from "@/types/partido-arbitro";
 
-type EstadoVista = "PROGRAMADO" | "EN_CURSO" | "FINALIZADO";
+type EstadoVista = MesaPartido["estado"];
 
 type Aviso = {
   texto: string;
@@ -30,6 +32,7 @@ function fechaLarga(valor: string | null): string | null {
   const fecha = new Date(valor);
   if (Number.isNaN(fecha.getTime())) return null;
   return new Intl.DateTimeFormat("es-SV", {
+    timeZone: "America/El_Salvador",
     dateStyle: "medium",
     timeStyle: "short",
   }).format(fecha);
@@ -78,6 +81,8 @@ async function ejecutar<T>(
     } else {
       setAviso({ texto: resultado.error, error: true });
     }
+  } catch {
+    setAviso({ texto: "No pudimos confirmar la operación. Actualiza el partido antes de reintentar.", error: true });
   } finally {
     setCargando(false);
   }
@@ -98,6 +103,28 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [confirmarFin, setConfirmarFin] = useState(false);
   const [marcadorGuardado, setMarcadorGuardado] = useState(false);
+
+  const [consulta, setConsulta] = useState<Resultado<MesaPartido> | null>(null);
+  const [revision, setRevision] = useState(0);
+  useEffect(() => {
+    if (!idValido) return;
+    let activo = true;
+    void consultarMesaArbitro(partidoId).then(resultado => {
+      if (!activo) return;
+      setConsulta(resultado);
+      if (!resultado.ok) return;
+      const datos = resultado.data;
+      setEstado(datos.estado);
+      setMarcador({ golesLocal: datos.golesLocal, golesVisitante: datos.golesVisitante, faltasLocal: datos.faltasLocal, faltasVisitante: datos.faltasVisitante });
+      setInicioReal(datos.inicioReal);
+      setFinReal(datos.finReal);
+      setParticipantes(datos.participantes);
+      setParticipantesTexto([...datos.participantes.local, ...datos.participantes.visitante].map(j => j.id).join(", "));
+      setMarcadorGuardado(true);
+      setConfirmarFin(false);
+    });
+    return () => { activo = false; };
+  }, [partidoId, idValido, revision]);
 
   const chips = useMemo(() => participantesTexto.split(/[\s,;]+/).filter(Boolean).slice(0, 30), [participantesTexto]);
   const puedeEditar = estado === "EN_CURSO";
@@ -123,6 +150,9 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
     );
   }
 
+  if (!consulta) return <main className="league-page"><p role="status">Cargando partido...</p></main>;
+  if (!consulta.ok) return <main className="league-page"><h1>Mesa del partido</h1><p role="alert" className="league-alert">{consulta.error}</p><button type="button" onClick={() => setRevision(r => r + 1)}>Reintentar</button><Link href="/arbitro/partidos" className="league-link">Cambiar de partido</Link></main>;
+
   return (
     <main className="league-page">
       <header className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -134,7 +164,7 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
 
         <div className="bg-slate-50 px-8 py-4 dark:bg-slate-900/50">
           <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <p className="font-semibold text-slate-900 dark:text-white">nPCs / Liga amateur</p>
+            <p className="font-semibold text-slate-900 dark:text-white">Strikers by NPCs</p>
             <p>Acceso: árbitro asignado</p>
           </div>
         </div>
@@ -142,8 +172,8 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
         <div className="grid gap-10 px-8 py-8 lg:grid-cols-[minmax(0,2.2fr)_340px]">
           <section className="space-y-6">
             <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 dark:text-slate-300">
-              <span className={`rounded-full px-4 py-2 text-sm font-bold ${badgeEstado(estado)}`}>{estado === "PROGRAMADO" ? "PROGRAMADO" : estado === "EN_CURSO" ? "EN CURSO" : "FINALIZADO"}</span>
-              <span>Partido #{partidoId}</span>
+              <span className={`rounded-full px-4 py-2 text-sm font-bold ${badgeEstado(estado)}`}>{estado.replace("_", " ")}</span>
+              <span>Partido #{partidoId} · {consulta.data.local.nombre} vs. {consulta.data.visitante.nombre}</span>
               <span>|</span>
               <span>Inicio real: {fechaLarga(inicioReal) ?? "Pendiente"}</span>
               {finReal && <><span>|</span><span>Fin real: {fechaLarga(finReal)}</span></>}
@@ -157,7 +187,8 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
 
             <div className="grid gap-5 md:grid-cols-2">
               <section className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center dark:border-slate-800 dark:bg-slate-900/60">
-                <p className="text-xl font-bold text-slate-900 dark:text-white">LOCAL</p>
+                <div className="mb-3 flex justify-center"><EscudoEquipo nombre={consulta.data.local.nombre} id={consulta.data.local.id} /></div>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">{consulta.data.local.nombre}<span className="block text-xs font-normal mt-1">LOCAL</span></p>
                 <div className="mt-6 text-6xl font-bold text-blue-600">{marcador.golesLocal}</div>
                 <label className="mt-5 block text-sm font-medium text-slate-700 dark:text-slate-200">
                   Goles
@@ -186,7 +217,8 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
               </section>
 
               <section className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center dark:border-slate-800 dark:bg-slate-900/60">
-                <p className="text-xl font-bold text-slate-900 dark:text-white">VISITANTE</p>
+                <div className="mb-3 flex justify-center"><EscudoEquipo nombre={consulta.data.visitante.nombre} id={consulta.data.visitante.id} /></div>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">{consulta.data.visitante.nombre}<span className="block text-xs font-normal mt-1">VISITANTE</span></p>
                 <div className="mt-6 text-6xl font-bold text-blue-600">{marcador.golesVisitante}</div>
                 <label className="mt-5 block text-sm font-medium text-slate-700 dark:text-slate-200">
                   Goles
@@ -388,6 +420,7 @@ export function MesaArbitro({ idTexto }: { idTexto: string }) {
       </header>
 
       <div className="mt-6 flex flex-wrap gap-3">
+        <button type="button" disabled={cargando} className="league-link" onClick={() => { setConsulta(null); setAviso(null); setRevision(r => r + 1); }}>Actualizar partido</button>
         <Link href={`/arbitro/partidos/${partidoId}/estadisticas`} className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-800">
           Estadísticas del partido
         </Link>

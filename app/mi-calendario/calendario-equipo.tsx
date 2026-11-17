@@ -1,5 +1,7 @@
 "use client";
 
+import { EscudoEquipo } from "@/components/equipos/escudo-equipo";
+import { FixtureCard } from "@/components/calendario/fixture-card";
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import { obtenerDetallePartido, obtenerMiCalendario } from "@/app/actions/calendario";
@@ -13,19 +15,6 @@ const fecha = new Intl.DateTimeFormat("es-SV", {
 const hora = new Intl.DateTimeFormat("es-SV", {
   timeZone: "America/El_Salvador", hour: "2-digit", minute: "2-digit", hour12: false,
 });
-
-function Estado({ valor }: { valor: PartidoCalendario["estado"] }) {
-  const apariencia = {
-    PROGRAMADO: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200",
-    EN_CURSO: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200",
-    FINALIZADO: "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200",
-    CANCELADO: "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200",
-  };
-  const etiquetas = {
-    PROGRAMADO: "Programado", EN_CURSO: "En curso", FINALIZADO: "Finalizado", CANCELADO: "Cancelado",
-  };
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${apariencia[valor]}`}>{etiquetas[valor]}</span>;
-}
 
 function Condicion({ valor }: { valor: PartidoCalendario["condicion"] }) {
   return (
@@ -44,7 +33,11 @@ function Detalle({ partido, cerrar }: { partido: DetallePartido; cerrar: () => v
         <h2 className="text-lg font-semibold">Detalle del partido · Jornada {partido.jornada}</h2>
         <button type="button" onClick={cerrar} className="rounded-lg border px-3 py-1 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Cerrar</button>
       </div>
-      <p className="mt-3 text-xl font-semibold">{partido.local.nombre} vs. {partido.visitante.nombre}</p>
+      <p className="equipo-con-escudo mt-3 flex-wrap text-xl font-semibold">
+        <EscudoEquipo nombre={partido.local.nombre} id={partido.local.id} />
+        <span>{partido.local.nombre} vs. {partido.visitante.nombre}</span>
+        <EscudoEquipo nombre={partido.visitante.nombre} id={partido.visitante.id} />
+      </p>
       <dl className="mt-3 space-y-1 text-sm">
         <div><dt className="inline font-medium">Inicio: </dt><dd className="inline">{fecha.format(new Date(partido.inicio))} · {hora.format(new Date(partido.inicio))}</dd></div>
         <div><dt className="inline font-medium">Fin: </dt><dd className="inline">{fecha.format(new Date(partido.fin))} · {hora.format(new Date(partido.fin))}</dd></div>
@@ -57,6 +50,7 @@ function Detalle({ partido, cerrar }: { partido: DetallePartido; cerrar: () => v
 
 export function CalendarioEquipoVista() {
   const { equipoActualId } = useAuth();
+  const [jornadaSeleccionada, setJornadaSeleccionada] = useState<number | null>(null);
   const [ahora, setAhora] = useState(() => Date.now());
   const consultar = useCallback(() => obtenerMiCalendario(), []);
   const { resultado, recargar } = useConsulta(consultar);
@@ -84,10 +78,17 @@ export function CalendarioEquipoVista() {
     ? [...resultado.data.partidos].filter((partido) => partido.estado !== "CANCELADO")
         .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
     : [];
+  const miEquipo = resultado?.ok && resultado.data.nombreEquipo
+    ? { id: resultado.data.equipoId, nombre: resultado.data.nombreEquipo }
+    : null;
   const proximo = partidos.find((partido) =>
     (partido.estado === "PROGRAMADO" || partido.estado === "EN_CURSO") &&
     new Date(partido.fin).getTime() >= ahora
   );
+
+  const jornadas = [...new Set(partidos.map(p => p.jornada))];
+  const jornadaActiva = jornadaSeleccionada !== null && jornadas.includes(jornadaSeleccionada) ? jornadaSeleccionada : null;
+  const visibles = jornadaActiva === null ? partidos : partidos.filter(p => p.jornada === jornadaActiva);
 
   function actualizar() {
     setAhora(Date.now());
@@ -143,59 +144,23 @@ export function CalendarioEquipoVista() {
         <>
           <p className="mb-3 text-sm text-slate-600 dark:text-slate-300">{partidos.length} partidos publicados</p>
 
-          {/* Escritorio: tabla como el mockup. */}
-          <div className="hidden overflow-x-auto rounded-xl border border-slate-300 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 md:block">
-            <table className="w-full min-w-[850px] border-collapse text-left text-sm">
-              <thead className="bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-100">
-                <tr>
-                  <th scope="col" className="px-4 py-3">Jornada</th>
-                  <th scope="col" className="px-4 py-3">Fecha</th>
-                  <th scope="col" className="px-4 py-3">Hora</th>
-                  <th scope="col" className="px-4 py-3">Cancha</th>
-                  <th scope="col" className="px-4 py-3">Árbitro</th>
-                  <th scope="col" className="px-4 py-3">Rival</th>
-                  <th scope="col" className="px-4 py-3">Condición</th>
-                  <th scope="col" className="px-4 py-3">Estado</th>
-                  <th scope="col" className="px-4 py-3">Detalle</th>
-                </tr>
-              </thead>
-              <tbody>
-                {partidos.map((partido) => (
-                  <tr key={partido.id} className={`border-t border-slate-200 dark:border-slate-700 ${partido.id === proximo?.id ? "bg-blue-100/80 font-medium dark:bg-blue-950/50" : "hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
-                    <td className="px-4 py-3">J{partido.jornada}</td>
-                    <td className="whitespace-nowrap px-4 py-3">{fecha.format(new Date(partido.inicio))}</td>
-                    <td className="whitespace-nowrap px-4 py-3">{hora.format(new Date(partido.inicio))}</td>
-                    <td className="px-4 py-3">{partido.cancha.nombre} · {partido.cancha.direccion}</td>
-                    <td className="px-4 py-3">{partido.arbitro.nombre}</td>
-                    <td className="px-4 py-3">{partido.rival.nombre}</td>
-                    <td className="px-4 py-3"><Condicion valor={partido.condicion} /></td>
-                    <td className="px-4 py-3"><Estado valor={partido.estado} /></td>
-                    <td className="px-4 py-3"><button type="button" onClick={() => void abrirDetalle(partido.id)} className="font-semibold text-blue-700 underline dark:text-blue-300">Ver detalle</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Móvil: tarjetas legibles desde 360 px. */}
-          <div className="grid gap-3 md:hidden">
-            {partidos.map((partido) => (
-              <article key={partido.id} className={`rounded-xl border p-4 shadow-sm ${partido.id === proximo?.id
-                ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/40"
-                : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900"}`}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-semibold">J{partido.jornada} · {fecha.format(new Date(partido.inicio))} · {hora.format(new Date(partido.inicio))}</h2>
-                  <Estado valor={partido.estado} />
-                </div>
-                {partido.id === proximo?.id && <p className="mt-1 text-xs font-semibold text-blue-700 dark:text-blue-300">Próximo partido</p>}
-                <p className="mt-2 text-sm">{partido.cancha.nombre} · {partido.cancha.direccion}</p>
-                <p className="mt-1 text-sm">Árbitro: {partido.arbitro.nombre}</p>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">Rival: <strong>{partido.rival.nombre}</strong><Condicion valor={partido.condicion} /></div>
-                <button type="button" onClick={() => void abrirDetalle(partido.id)} className="mt-3 text-sm font-semibold text-blue-700 underline dark:text-blue-300">Ver detalle</button>
-              </article>
-            ))}
-          </div>
-
+          <section className="fixtures-panel" aria-label="Partidos de mi equipo">
+            <div className="fixtures-heading"><div><p className="fixture-kicker">CADA JORNADA CUENTA</p><h2>TUS ENCUENTROS</h2></div><span>HORARIO DE EL SALVADOR</span></div>
+            <nav className="fixture-rounds" aria-label="Seleccionar jornada">
+              <button type="button" aria-pressed={jornadaActiva === null} onClick={() => { setJornadaSeleccionada(null); setDetalle(null); }}>Todos los partidos</button>
+              {jornadas.map(j => <button key={j} type="button" aria-pressed={j === jornadaActiva} onClick={() => { setJornadaSeleccionada(j); setDetalle(null); }}>Jornada {j}</button>)}
+            </nav>
+            <div className="fixtures-grid">
+              {visibles.map(partido => <FixtureCard key={partido.id} id={partido.id} inicio={partido.inicio}
+                local={partido.condicion === "LOCAL" ? miEquipo : partido.rival}
+                visitante={partido.condicion === "VISITANTE" ? miEquipo : partido.rival}
+                cancha={partido.cancha.nombre} estado={partido.estado} highlighted={partido.id === proximo?.id}
+                footer={<><p>Árbitro: {partido.arbitro.nombre}</p><p>{partido.cancha.direccion}</p><Condicion valor={partido.condicion} /></>}>
+                <button type="button" onClick={() => void abrirDetalle(partido.id)}><span aria-hidden="true">↗</span> Ver detalle</button>
+                {partido.id === proximo?.id && <span className="fixture-upcoming">Próximo partido</span>}
+              </FixtureCard>)}
+            </div>
+          </section>
           {proximo && <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">El próximo partido está resaltado. El calendario es de solo lectura.</p>}
           <div aria-live="polite">
             {detalleCargando && <p role="status" className="mt-5">Cargando detalle...</p>}

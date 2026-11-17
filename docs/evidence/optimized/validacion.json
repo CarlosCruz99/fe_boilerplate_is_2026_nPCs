@@ -1,0 +1,29 @@
+{
+  "fecha": "2026-11-16",
+  "frontend": {
+    "lint": "correcto",
+    "build": "correcto (Webpack y TypeScript)",
+    "pruebas": 139,
+    "archivos": 20
+  },
+  "navegador": {
+    "vistas": 38,
+    "interacciones": 19,
+    "anchos": [
+      360,
+      1440
+    ],
+    "erroresJavaScript": 0,
+    "desbordamientos": 0
+  },
+  "medicionLocal": {
+    "muestras": 3,
+    "medianaAntesMs": 245.1,
+    "medianaDespuesMs": 179.2,
+    "elementosDOMAntes": 1171,
+    "elementosDOMDespues": 387,
+    "accionesPOSTAntes": 4,
+    "accionesPOSTDespues": 3
+  },
+  "video": "Real, Pexels, 8s, 1280x720, sin audio, bajo demanda"
+}
