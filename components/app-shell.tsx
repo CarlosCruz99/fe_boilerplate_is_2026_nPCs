@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import strikersLogo from "@/public/media/Strikers_Logo.png";
 import { FootballScene } from "@/components/football-scene";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -20,7 +22,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <header className={`app-header ${publica ? "public-header" : ""}`}>
       <div className="app-header-inner">
         <Link href={publica ? "/login" : "/"} className="brand" aria-label="Strikers by NPCs · Inicio">
-          <span className="brand-mark" aria-hidden="true">S<span>↗</span></span>
+          <Image className="brand-logo" src={strikersLogo} alt="" width={56} height={42} preload />
           <span>Strikers<small>by NPCs</small></span>
         </Link>
         {usuario && !publica ? <div className="app-account">
