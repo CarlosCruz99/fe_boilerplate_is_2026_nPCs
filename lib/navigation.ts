@@ -6,6 +6,7 @@ export const nombresRol = { JUGADOR: "Jugador", ARBITRO: "Árbitro", ORGANIZADOR
 
 export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
   if (usuario.rol === "ORGANIZADOR") return [
+    { href: "/organizador/destacados", titulo: "Jugadores destacados", descripcion: "Consulta la clasificación por goles y asistencias de cada temporada." },
     { href: "/organizador/calendario", titulo: "Calendario", descripcion: "Organiza jornadas, programa encuentros y asigna árbitros." },
     { href: "/organizador/equipos", titulo: "Inscripciones", descripcion: "Revisa las solicitudes y valida los equipos de la liga." },
     { href: "/organizador/cuotas", titulo: "Cuotas", descripcion: "Administra las cuotas de inscripción y arbitraje." },
