@@ -1,0 +1,20 @@
+{
+  "origen": "Backend local de prueba ajustado a los DTO BE-6.1 y BE-6.2; no es prueba contra datos oficiales.",
+  "checks": [
+    {
+      "width": 360,
+      "accesoSinSesion": true,
+      "listaYDetalle": true,
+      "filtrosYEnlace": true,
+      "sinOverflow": true
+    },
+    {
+      "width": 1440,
+      "accesoSinSesion": true,
+      "listaYDetalle": true,
+      "filtrosYEnlace": true,
+      "sinOverflow": true
+    }
+  ],
+  "errors": []
+}
