@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { usuario } = useAuth();
   const pathname = usePathname();
   const publica = pathname === "/login" || pathname === "/registro";
-  const accesos = usuario && !publica ? [{ href: "/", titulo: "Inicio" }, ...accesosUsuario(usuario)] : [];
+  const accesos = usuario && !publica ? [{ href: "/", titulo: "Inicio" }, ...accesosUsuario(usuario), { href: "/partidos", titulo: "Marcadores" }] : [{ href: "/partidos", titulo: "Marcadores" }, { href: "/login", titulo: "Iniciar sesión" }];
 
   return <>
     <FootballScene />
@@ -22,7 +22,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <header className={`app-header ${publica ? "public-header" : ""}`}>
       <div className="app-header-inner">
         <Link href={publica ? "/login" : "/"} className="brand" aria-label="Strikers by NPCs · Inicio">
-          <Image className="brand-logo" src={strikersLogo} alt="" width={56} height={42} preload />
+          <Image className="brand-logo" src={strikersLogo} alt="" width={strikersLogo.width} height={strikersLogo.height} preload />
           <span>Strikers<small>by NPCs</small></span>
         </Link>
         {usuario && !publica ? <div className="app-account">
