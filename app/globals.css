@@ -711,3 +711,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 .personal-table-scroll thead { color: var(--accent); }
 .personal-error-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 @media (max-width: 600px) { .personal-summary { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
+
+/* H14: historial privado de pagos y sumas del servidor. */
+.payment-history-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.payment-history-filters > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.payment-totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.payment-totals .league-card { min-width: 0; }
+.payment-totals h2 { font-size: 1rem; }
+.payment-totals strong { color: var(--accent); font-size: clamp(1.5rem, 3vw, 2rem); overflow-wrap: anywhere; }
+.payment-history-panel { min-width: 0; max-width: 100%; }
+.payment-history-scroll { overflow-x: auto; width: 100%; }
+.payment-history-scroll table { width: 100%; min-width: 850px; border-collapse: collapse; text-align: left; }
+.payment-history-scroll caption { text-align: left; color: var(--muted); padding: 16px 0; }
+.payment-history-scroll th, .payment-history-scroll td { overflow-wrap: normal; padding: 16px 12px; border-bottom: 1px solid var(--border); }
+.payment-history-scroll thead { color: var(--accent); }
+.payment-history-hint { color: var(--muted); font-size: .8rem; margin-top: 16px; }
+@media (max-width: 900px) { .payment-totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .payment-history-filters, .payment-totals { grid-template-columns: minmax(0, 1fr); } }
