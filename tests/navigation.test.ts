@@ -7,7 +7,7 @@ const rutas = (usuario: UsuarioSesion) => accesosUsuario(usuario).map((acceso) =
 
 describe("Accesos de la liga", () => {
   it("hace accesibles calendario y avisos para jugadores sin ofrecer funciones de capitán", () => {
-    expect(rutas(jugador)).toEqual(["/mi-calendario", "/avisos", "/equipos/nuevo", "/vincular-ficha"]);
+    expect(rutas(jugador)).toEqual(["/mis-estadisticas", "/mi-calendario", "/avisos", "/equipos/nuevo", "/vincular-ficha"]);
   });
   it("enlaza la plantilla del equipo capitaneado y sus pagos", () => {
     const accesos = rutas({ ...jugador, equipoActualId: 9, capitaneaEquipoId: 23 });

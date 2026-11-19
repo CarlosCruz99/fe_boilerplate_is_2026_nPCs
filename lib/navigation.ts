@@ -15,6 +15,7 @@ export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
     { href: "/arbitro/partidos", titulo: "Mesa del árbitro", descripcion: "Gestiona el marcador, los participantes y las estadísticas de tu partido." },
   ];
   return [
+    { href: "/mis-estadisticas", titulo: "Mis estadísticas", descripcion: "Consulta tus acumulados y el detalle de cada partido por temporada." },
     { href: "/mi-calendario", titulo: "Mi calendario", descripcion: "Consulta los encuentros, las canchas y los horarios de tu equipo." },
     { href: "/avisos", titulo: "Avisos", descripcion: "Mantente al día con las novedades de la liga." },
     { href: "/equipos/nuevo", titulo: "Inscripción de equipo", descripcion: "Inscribe tu equipo o consulta el estado de tu solicitud." },
