@@ -1,0 +1,21 @@
+{
+  "origen": "Backend local de prueba ajustado a BE-7.1/BE-7.2, no datos oficiales.",
+  "checks": [
+    {
+      "width": 360,
+      "publicaSinSesion": true,
+      "capitanConResumenYResaltado": true,
+      "rivalesConLugarYPuntos": true,
+      "sinOverflow": true
+    },
+    {
+      "width": 1440,
+      "publicaSinSesion": true,
+      "capitanConResumenYResaltado": true,
+      "rivalesConLugarYPuntos": true,
+      "sinOverflow": true
+    }
+  ],
+  "jugadorSinRivales": true,
+  "errors": []
+}
