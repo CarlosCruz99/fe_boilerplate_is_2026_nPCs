@@ -1,0 +1,51 @@
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { beforeEach, afterEach, expect, it, vi } from "vitest";
+import { VistaPosiciones } from "@/components/posiciones/tabla-posiciones";
+import { consultarPosiciones } from "@/app/actions/posiciones";
+import { useAuth } from "@/contexts/auth-context";
+vi.mock("@/app/actions/posiciones", () => ({ consultarPosiciones: vi.fn() }));
+vi.mock("@/contexts/auth-context", () => ({ useAuth: vi.fn() }));
+const fila = { lugar: 4, equipoId: 2, equipo: "Tigres", pj: 7, pg: 4, pe: 1, pp: 2, gf: 17, gc: 9, dg: 8, puntos: 13 };
+const data = { temporadaId: 1, posiciones: [{ ...fila, lugar: 2, equipoId: 1, equipo: "Águilas" }, fila] };
+beforeEach(() => { vi.resetAllMocks(); vi.mocked(useAuth).mockReturnValue({ equipoActualId: 2 } as ReturnType<typeof useAuth>); vi.mocked(consultarPosiciones).mockResolvedValue({ ok: true, data }); });
+afterEach(() => vi.useRealTimers());
+it("conserva orden y valores oficiales y resalta equipo de sesión con resumen", async () => {
+  render(<VistaPosiciones />);
+  expect(screen.getByText("Cargando tabla…")).toBeInTheDocument();
+  const tabla = await screen.findByRole("table");
+  const filas = within(tabla).getAllByRole("row");
+  expect(filas[1]).toHaveTextContent("Águilas");
+  expect(filas[2]).toHaveClass("standings-mine");
+  expect(within(filas[2]).getAllByRole("cell").map(c => c.textContent)).toEqual(["4", "7", "4", "1", "2", "17", "9", "8", "13"]);
+  expect(screen.getByRole("region", { name: "Resumen de mi equipo" })).toHaveTextContent("Lugar 4 · 13 puntos");
+  expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+});
+it("es pública sin equipo y no conserva resaltado al cambiar sesión", async () => {
+  const { rerender } = render(<VistaPosiciones />);
+  await screen.findByRole("table");
+  vi.mocked(useAuth).mockReturnValue({ equipoActualId: null } as ReturnType<typeof useAuth>);
+  rerender(<VistaPosiciones />);
+  expect(screen.queryByRole("region", { name: "Resumen de mi equipo" })).not.toBeInTheDocument();
+  expect(document.querySelector(".standings-mine")).toBeNull();
+});
+it("diferencia error y vacío y reintenta", async () => {
+  vi.mocked(consultarPosiciones).mockResolvedValueOnce({ ok: false, status: 500, error: "Error" }).mockResolvedValueOnce({ ok: true, data: { temporadaId: 1, posiciones: [] } });
+  render(<VistaPosiciones />);
+  await screen.findByRole("alert");
+  fireEvent.click(screen.getByText("Reintentar"));
+  await screen.findByText("Aún no hay resultados registrados en esta temporada.");
+});
+it("actualiza a 30 segundos y con botón, limpia al desmontar", async () => {
+  vi.useFakeTimers();
+  const { unmount } = render(<VistaPosiciones />);
+  await act(async () => {});
+  await act(async () => vi.advanceTimersByTime(29999));
+  expect(consultarPosiciones).toHaveBeenCalledTimes(1);
+  await act(async () => vi.advanceTimersByTime(1));
+  expect(consultarPosiciones).toHaveBeenCalledTimes(2);
+  await act(async () => fireEvent.click(screen.getByText("Actualizar")));
+  expect(consultarPosiciones).toHaveBeenCalledTimes(3);
+  unmount();
+  await act(async () => vi.advanceTimersByTime(60000));
+  expect(consultarPosiciones).toHaveBeenCalledTimes(3);
+});

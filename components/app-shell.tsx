@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { usuario } = useAuth();
   const pathname = usePathname();
   const publica = pathname === "/login" || pathname === "/registro";
-  const accesos = usuario && !publica ? [{ href: "/", titulo: "Inicio" }, ...accesosUsuario(usuario), { href: "/partidos", titulo: "Marcadores" }] : [{ href: "/partidos", titulo: "Marcadores" }, { href: "/login", titulo: "Iniciar sesión" }];
+  const accesos = usuario && !publica ? [{ href: "/", titulo: "Inicio" }, ...accesosUsuario(usuario), { href: "/partidos", titulo: "Marcadores" }, { href: "/posiciones", titulo: "Posiciones" }] : [{ href: "/partidos", titulo: "Marcadores" }, { href: "/posiciones", titulo: "Posiciones" }, { href: "/login", titulo: "Iniciar sesión" }];
 
   return <>
     <FootballScene />
