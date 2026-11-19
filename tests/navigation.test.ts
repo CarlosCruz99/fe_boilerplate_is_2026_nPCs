@@ -13,6 +13,7 @@ describe("Accesos de la liga", () => {
     const accesos = rutas({ ...jugador, equipoActualId: 9, capitaneaEquipoId: 23 });
     expect(accesos).toContain("/equipos/23/jugadores");
     expect(accesos).toContain("/equipo/cuotas");
+    expect(accesos).toContain("/equipo/pagos");
     expect(accesos).not.toContain("/equipos/9/jugadores");
   });
   it("ofrece las herramientas de organización y destacados", () => {

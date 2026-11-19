@@ -21,6 +21,7 @@ export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
     { href: "/equipos/nuevo", titulo: "Inscripción de equipo", descripcion: "Inscribe tu equipo o consulta el estado de tu solicitud." },
     ...(usuario.capitaneaEquipoId !== null ? [
       { href: `/equipos/${usuario.capitaneaEquipoId}/jugadores`, titulo: "Mi plantilla", descripcion: "Administra los jugadores y sus fichas para la temporada." },
+      { href: "/equipo/pagos", titulo: "Historial de pagos", descripcion: "Revisa los pagos de tu equipo y sus comprobantes privados por temporada." },
       { href: "/equipo/cuotas", titulo: "Cuotas y pagos", descripcion: "Consulta tus cuotas y registra los pagos de tu equipo." },
     ] : []),
     { href: "/vincular-ficha", titulo: "Mi ficha", descripcion: "Vincula tu cuenta a la ficha de jugador de tu equipo." },
