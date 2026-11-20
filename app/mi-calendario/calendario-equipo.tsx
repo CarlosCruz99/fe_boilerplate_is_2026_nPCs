@@ -157,6 +157,7 @@ export function CalendarioEquipoVista() {
                 cancha={partido.cancha.nombre} estado={partido.estado} highlighted={partido.id === proximo?.id}
                 footer={<><p>Árbitro: {partido.arbitro.nombre}</p><p>{partido.cancha.direccion}</p><Condicion valor={partido.condicion} /></>}>
                 <button type="button" onClick={() => void abrirDetalle(partido.id)}><span aria-hidden="true">↗</span> Ver detalle</button>
+                <Link href={`/partidos/${partido.id}/galeria`}><span aria-hidden="true">▧</span> Galería</Link>
                 {partido.id === proximo?.id && <span className="fixture-upcoming">Próximo partido</span>}
               </FixtureCard>)}
             </div>
