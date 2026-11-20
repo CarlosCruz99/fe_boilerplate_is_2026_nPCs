@@ -10,6 +10,7 @@ export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
     { href: "/organizador/calendario", titulo: "Calendario", descripcion: "Organiza jornadas, programa encuentros y asigna árbitros." },
     { href: "/organizador/equipos", titulo: "Inscripciones", descripcion: "Revisa las solicitudes y valida los equipos de la liga." },
     { href: "/organizador/cuotas", titulo: "Cuotas", descripcion: "Administra las cuotas de inscripción y arbitraje." },
+    { href: "/organizador/pagos", titulo: "Verificación de pagos", descripcion: "Revisa comprobantes y resuelve los pagos pendientes." },
     { href: "/reportes/pagos", titulo: "Reporte de pagos", descripcion: "Consulta saldos pendientes y vencimientos por equipo." },
     { href: "/reportes/deportivo", titulo: "Reporte deportivo", descripcion: "Consulta los indicadores oficiales de cada temporada." },
   ];
