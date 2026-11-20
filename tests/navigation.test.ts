@@ -17,7 +17,7 @@ describe("Accesos de la liga", () => {
     expect(accesos).not.toContain("/equipos/9/jugadores");
   });
   it("ofrece las herramientas de organización y destacados", () => {
-    expect(rutas({ ...jugador, rol: "ORGANIZADOR" })).toEqual(["/organizador/destacados", "/organizador/calendario", "/organizador/equipos", "/organizador/cuotas"]);
+    expect(rutas({ ...jugador, rol: "ORGANIZADOR" })).toEqual(["/organizador/destacados", "/organizador/calendario", "/organizador/equipos", "/organizador/cuotas", "/reportes/pagos"]);
   });
   it("lleva al árbitro a su mesa de control", () => {
     expect(rutas({ ...jugador, rol: "ARBITRO" })).toEqual(["/arbitro/partidos"]);
