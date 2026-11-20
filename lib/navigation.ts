@@ -11,6 +11,7 @@ export function accesosUsuario(usuario: UsuarioSesion): Acceso[] {
     { href: "/organizador/equipos", titulo: "Inscripciones", descripcion: "Revisa las solicitudes y valida los equipos de la liga." },
     { href: "/organizador/cuotas", titulo: "Cuotas", descripcion: "Administra las cuotas de inscripción y arbitraje." },
     { href: "/reportes/pagos", titulo: "Reporte de pagos", descripcion: "Consulta saldos pendientes y vencimientos por equipo." },
+    { href: "/reportes/deportivo", titulo: "Reporte deportivo", descripcion: "Consulta los indicadores oficiales de cada temporada." },
   ];
   if (usuario.rol === "ARBITRO") return [
     { href: "/arbitro/partidos", titulo: "Mesa del árbitro", descripcion: "Gestiona el marcador, los participantes y las estadísticas de tu partido." },
