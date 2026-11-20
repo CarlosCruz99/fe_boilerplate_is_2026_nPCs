@@ -205,6 +205,7 @@ function ContenidoTemporada({
               <FixtureCard id={p.id} inicio={p.inicio} local={p.local} visitante={p.visitante} cancha={p.cancha.nombre} estado={p.estado}
                 footer={<AsignacionArbitro partidoId={p.id} estado={p.estado} actual={p.arbitro ?? null} ocupado={ocupado} bloquear={bloquear} guardado={datos => { setAviso(`Árbitro asignado: ${datos.arbitroNombre}.`); calendario.recargar(); }} />}>
                 <Link href={`/partidos/${p.id}/galeria`}><span aria-hidden="true">▧</span> Galería</Link>
+                {p.estado === "FINALIZADO" && <Link href={`/organizador/partidos/${p.id}/correccion-oficial`}>Corregir resultado</Link>}
                 {p.estado === "PROGRAMADO" && <>
                   <button aria-label={`Reprogramar partido ${p.id}`} disabled={ocupado || !catalogos.resultado?.ok} onClick={() => { setEdicion(p); setAviso(""); document.getElementById("calendar-editor")?.scrollIntoView?.({ block: "start" }); }}><span aria-hidden="true">↗</span> Reprogramar</button>
                   <button aria-label={`Cancelar partido ${p.id}`} disabled={ocupado} onClick={() => { setCancelacion(p); setError(""); }}><span aria-hidden="true">×</span> Cancelar</button>
