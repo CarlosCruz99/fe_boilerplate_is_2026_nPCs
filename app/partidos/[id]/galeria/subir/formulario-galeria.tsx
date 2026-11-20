@@ -55,7 +55,7 @@ export function FormularioGaleria({ partidoId }: { partidoId: number }) {
   const pendientes = cola.filter(e => e.estado === "Pendiente");
   const fallidos = cola.filter(e => e.estado === "Error" && !validarArchivoGaleria(e.archivo));
   return <main className="league-page">
-    <Link href="/organizador/calendario" className="underline">Volver al calendario</Link>
+    <Link href={`/partidos/${partidoId}/galeria`} className="underline">Volver a la galería</Link>
     <h1 className="text-2xl font-semibold">Subir contenido · Partido #{partidoId}</h1>
     <p>Hasta 30 archivos por partido. Fotos JPG/PNG hasta 5 MiB y videos MP4 hasta 50 MiB.</p>
     {total !== null && <p role="status">{total} {total === 1 ? "archivo activo" : "archivos activos"} · {Math.max(0, 30 - total)} espacios disponibles. El cupo se confirma al publicar.</p>}
