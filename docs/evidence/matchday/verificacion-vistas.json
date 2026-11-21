@@ -1,0 +1,805 @@
+{
+  "results": [
+    {
+      "role": "organizador",
+      "path": "/",
+      "width": 1440,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/",
+      "width": 360,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/calendario",
+      "width": 1440,
+      "url": "/organizador/calendario",
+      "heading": [
+        "Calendario del organizador"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/calendario",
+      "width": 360,
+      "url": "/organizador/calendario",
+      "heading": [
+        "Calendario del organizador"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/equipos",
+      "width": 1440,
+      "url": "/organizador/equipos",
+      "heading": [
+        "Validar inscripciones"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/equipos",
+      "width": 360,
+      "url": "/organizador/equipos",
+      "heading": [
+        "Validar inscripciones"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/cuotas",
+      "width": 1440,
+      "url": "/organizador/cuotas",
+      "heading": [
+        "Cuotas de la liga"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/organizador/cuotas",
+      "width": 360,
+      "url": "/organizador/cuotas",
+      "heading": [
+        "Cuotas de la liga"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/partidos/1/galeria/subir",
+      "width": 1440,
+      "url": "/partidos/1/galeria/subir",
+      "heading": [
+        "Subir contenido · Partido #1"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "organizador",
+      "path": "/partidos/1/galeria/subir",
+      "width": 360,
+      "url": "/partidos/1/galeria/subir",
+      "heading": [
+        "Subir contenido · Partido #1"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/",
+      "width": 1440,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/",
+      "width": 360,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/mi-calendario",
+      "width": 1440,
+      "url": "/mi-calendario",
+      "heading": [
+        "Mi calendario"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/mi-calendario",
+      "width": 360,
+      "url": "/mi-calendario",
+      "heading": [
+        "Mi calendario"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos",
+      "width": 1440,
+      "url": "/avisos",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos",
+      "width": 360,
+      "url": "/avisos",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipos/nuevo",
+      "width": 1440,
+      "url": "/equipos/nuevo",
+      "heading": [
+        "Inscribir mi equipo"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipos/nuevo",
+      "width": 360,
+      "url": "/equipos/nuevo",
+      "heading": [
+        "Inscribir mi equipo"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipo/cuotas",
+      "width": 1440,
+      "url": "/equipo/cuotas",
+      "heading": [
+        "Cuotas y registro de pagos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipo/cuotas",
+      "width": 360,
+      "url": "/equipo/cuotas",
+      "heading": [
+        "Cuotas y registro de pagos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/vincular-ficha",
+      "width": 1440,
+      "url": "/vincular-ficha",
+      "heading": [
+        "Vincular mi ficha"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/vincular-ficha",
+      "width": 360,
+      "url": "/vincular-ficha",
+      "heading": [
+        "Vincular mi ficha"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipos/1/jugadores",
+      "width": 1440,
+      "url": "/equipos/1/jugadores",
+      "heading": [
+        "Plantilla del equipo"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/equipos/1/jugadores",
+      "width": 360,
+      "url": "/equipos/1/jugadores",
+      "heading": [
+        "Plantilla del equipo"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/",
+      "width": 1440,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/",
+      "width": 360,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos",
+      "width": 1440,
+      "url": "/arbitro/partidos",
+      "heading": [
+        "Mesa del árbitro"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos",
+      "width": 360,
+      "url": "/arbitro/partidos",
+      "heading": [
+        "Mesa del árbitro"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos/1",
+      "width": 1440,
+      "url": "/arbitro/partidos/1",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos/1",
+      "width": 360,
+      "url": "/arbitro/partidos/1",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos/1/estadisticas",
+      "width": 1440,
+      "url": "/arbitro/partidos/1/estadisticas",
+      "heading": [
+        "Registro de estadísticas individuales por partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro",
+      "path": "/arbitro/partidos/1/estadisticas",
+      "width": 360,
+      "url": "/arbitro/partidos/1/estadisticas",
+      "heading": [
+        "Registro de estadísticas individuales por partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/login",
+      "width": 1440,
+      "url": "/login",
+      "heading": [
+        "ESTO ES\nMÁS QUE\nFÚTBOL."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/login",
+      "width": 360,
+      "url": "/login",
+      "heading": [
+        "ESTO ES\nMÁS QUE\nFÚTBOL."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/registro",
+      "width": 1440,
+      "url": "/registro",
+      "heading": [
+        "EL FÚTBOL\nSE JUEGA\nEN EQUIPO.",
+        "Crear cuenta"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/registro",
+      "width": 360,
+      "url": "/registro",
+      "heading": [
+        "EL FÚTBOL\nSE JUEGA\nEN EQUIPO.",
+        "Crear cuenta"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/no-existe",
+      "width": 1440,
+      "url": "/login",
+      "heading": [
+        "ESTO ES\nMÁS QUE\nFÚTBOL."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "publico",
+      "path": "/no-existe",
+      "width": 360,
+      "url": "/login",
+      "heading": [
+        "ESTO ES\nMÁS QUE\nFÚTBOL."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos/45",
+      "width": 1440,
+      "url": "/avisos/45",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos/45",
+      "width": 360,
+      "url": "/avisos/45",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos/calendario-publicado",
+      "width": 1440,
+      "url": "/avisos",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/avisos/calendario-publicado",
+      "width": 360,
+      "url": "/avisos",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/no-existe",
+      "width": 1440,
+      "url": "/no-existe",
+      "heading": [
+        "No encontramos esta página"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "capitan",
+      "path": "/no-existe",
+      "width": 360,
+      "url": "/no-existe",
+      "heading": [
+        "No encontramos esta página"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "jugador-sin-equipo",
+      "path": "/",
+      "width": 360,
+      "url": "/",
+      "heading": [
+        "EL JUEGO\nCONTINÚA."
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "jugador-sin-equipo",
+      "path": "/mi-calendario",
+      "width": 360,
+      "url": "/mi-calendario",
+      "heading": [
+        "Mi calendario"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "jugador-sin-equipo",
+      "path": "/avisos",
+      "width": 360,
+      "url": "/avisos",
+      "heading": [
+        "Bandeja de avisos"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/stadium.webp\")"
+    },
+    {
+      "role": "jugador-sin-equipo",
+      "path": "/equipos/nuevo",
+      "width": 360,
+      "url": "/equipos/nuevo",
+      "heading": [
+        "Inscribir mi equipo"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "jugador-sin-equipo",
+      "path": "/vincular-ficha",
+      "width": 360,
+      "url": "/vincular-ficha",
+      "heading": [
+        "Vincular mi ficha"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/team.webp\")"
+    },
+    {
+      "role": "arbitro-final",
+      "path": "/arbitro/partidos/1",
+      "width": 1440,
+      "url": "/arbitro/partidos/1",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-final",
+      "path": "/arbitro/partidos/1",
+      "width": 360,
+      "url": "/arbitro/partidos/1",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-final",
+      "path": "/arbitro/partidos/1/estadisticas",
+      "width": 1440,
+      "url": "/arbitro/partidos/1/estadisticas",
+      "heading": [
+        "Registro de estadísticas individuales por partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-final",
+      "path": "/arbitro/partidos/1/estadisticas",
+      "width": 360,
+      "url": "/arbitro/partidos/1/estadisticas",
+      "heading": [
+        "Registro de estadísticas individuales por partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-en-curso",
+      "path": "/arbitro/partidos/8",
+      "width": 1440,
+      "url": "/arbitro/partidos/8",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-en-curso",
+      "path": "/arbitro/partidos/8",
+      "width": 360,
+      "url": "/arbitro/partidos/8",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-finalizado",
+      "path": "/arbitro/partidos/12",
+      "width": 1440,
+      "url": "/arbitro/partidos/12",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    },
+    {
+      "role": "arbitro-finalizado",
+      "path": "/arbitro/partidos/12",
+      "width": 360,
+      "url": "/arbitro/partidos/12",
+      "heading": [
+        "Mesa del partido"
+      ],
+      "overflow": false,
+      "alerts": [],
+      "brokenImages": [],
+      "main": true,
+      "scene": "url(\"http://localhost:3001/media/matchday.webp\")"
+    }
+  ],
+  "errors": []
+}

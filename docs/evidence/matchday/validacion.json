@@ -1,0 +1,30 @@
+{
+  "fecha": "2026-11-16",
+  "frontend": {
+    "lint": "correcto",
+    "build": "next build --webpack: correcto",
+    "pruebas": 133,
+    "archivos": 19
+  },
+  "backend": {
+    "build": "correcto",
+    "pruebasUnitarias": 335,
+    "archivosUnitarios": 35,
+    "pruebasIntegracion": 230,
+    "archivosIntegracion": 19,
+    "integracion": "19 archivos y 230 pruebas aprobados en copia nueva aislada de PostgreSQL",
+    "lint": "sin errores; advertencia previa de sort sin comparador en test/seed/h1-dataset.spec.ts"
+  },
+  "chromium": {
+    "vistasYEstados": 57,
+    "interacciones": 21,
+    "anchos": [
+      1440,
+      360
+    ],
+    "excepcionesJavaScript": 0,
+    "desbordamientosDocumento": 0,
+    "imagenesRotas": 0
+  },
+  "totalPruebasAutomaticas": 698
+}

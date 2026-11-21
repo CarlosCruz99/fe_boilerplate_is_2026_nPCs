@@ -1,0 +1,21 @@
+{
+  "origen": "Backend local con fixtures ajustados a BE-10.1; no datos oficiales.",
+  "checks": [
+    {
+      "width": 360,
+      "resumenYDetalle": true,
+      "estadoInicialSinResultados": true,
+      "sinOverflow": true
+    },
+    {
+      "width": 1440,
+      "resumenYDetalle": true,
+      "estadoInicialSinResultados": true,
+      "sinOverflow": true
+    }
+  ],
+  "vacio": true,
+  "errorSinCeros": true,
+  "otroRolSinAcceso": true,
+  "errors": []
+}

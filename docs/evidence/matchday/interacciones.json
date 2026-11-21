@@ -1,0 +1,89 @@
+{
+  "checks": [
+    {
+      "name": "Credenciales incorrectas muestran error legible",
+      "ok": true
+    },
+    {
+      "name": "Login real redirige al inicio del organizador",
+      "ok": true
+    },
+    {
+      "name": "Catálogo de árbitros disponible",
+      "ok": true
+    },
+    {
+      "name": "Cancelar edición restaura el calendario",
+      "ok": true
+    },
+    {
+      "name": "Enlace de galería abre formulario",
+      "ok": true
+    },
+    {
+      "name": "Cuotas carga temporadas y equipos",
+      "ok": true
+    },
+    {
+      "name": "Restricción de rol visible",
+      "ok": true
+    },
+    {
+      "name": "Cerrar sesión elimina acceso",
+      "ok": true
+    },
+    {
+      "name": "Menú de plantilla resuelve el equipo",
+      "ok": true
+    },
+    {
+      "name": "Aviso antiguo lleva a bandeja real",
+      "ok": true
+    },
+    {
+      "name": "404 autenticada permite volver",
+      "ok": true
+    },
+    {
+      "name": "Control pausa escenario",
+      "ok": true
+    },
+    {
+      "name": "Pausa persiste tras navegar",
+      "ok": true
+    },
+    {
+      "name": "Control reactiva escenario",
+      "ok": true
+    },
+    {
+      "name": "Movimiento reducido detiene animaciones",
+      "ok": true
+    },
+    {
+      "name": "Selector abre partido asignado",
+      "ok": true
+    },
+    {
+      "name": "Registro exige campos obligatorios",
+      "ok": true
+    },
+    {
+      "name": "Partido 8 a 1440px recupera 1–7 y permite continuar",
+      "ok": true
+    },
+    {
+      "name": "Partido 8 a 360px recupera 1–7 y permite continuar",
+      "ok": true
+    },
+    {
+      "name": "Partido 12 a 1440px recupera 2–4 y bloquea edición",
+      "ok": true
+    },
+    {
+      "name": "Partido 12 a 360px recupera 2–4 y bloquea edición",
+      "ok": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "origen": "Backend local de prueba ajustado a BE-14.1, no pagos reales.",
+  "checks": [
+    {
+      "width": 360,
+      "resumenCuatroTotales": true,
+      "estadosYMotivo": true,
+      "temporadaAnterior": true,
+      "sinOverflow": true
+    },
+    {
+      "width": 1440,
+      "resumenCuatroTotales": true,
+      "estadosYMotivo": true,
+      "temporadaAnterior": true,
+      "sinOverflow": true
+    }
+  ],
+  "descargaPrivada": true,
+  "filtrosCombinados": true,
+  "vacioCuatroCeros": true,
+  "errorSinTotales": true,
+  "sinCapitaniaBloqueado": true,
+  "errors": []
+}

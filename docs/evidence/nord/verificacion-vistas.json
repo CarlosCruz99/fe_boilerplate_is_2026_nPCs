@@ -1,0 +1,386 @@
+[
+  {
+    "role": "organizador",
+    "route": "/",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Olga Organizadora"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Olga Organizadora"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/calendario",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Calendario del organizador"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/calendario",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Calendario del organizador"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/equipos",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Validar inscripciones"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/equipos",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Validar inscripciones"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/cuotas",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Cuotas de la liga"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/organizador/cuotas",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Cuotas de la liga"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/partidos/1/galeria/subir",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Subir contenido · Partido #1"
+    ]
+  },
+  {
+    "role": "organizador",
+    "route": "/partidos/1/galeria/subir",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Subir contenido · Partido #1"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Capitán Natalia García"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Capitán Natalia García"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/mi-calendario",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mi calendario"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/mi-calendario",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mi calendario"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/avisos",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bandeja de avisos"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/avisos",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bandeja de avisos"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipos/nuevo",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Inscribir mi equipo"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipos/nuevo",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Inscribir mi equipo"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipo/cuotas",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Cuotas y registro de pagos"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipo/cuotas",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Cuotas y registro de pagos"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/vincular-ficha",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Vincular mi ficha"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/vincular-ficha",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Vincular mi ficha"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipos/1/jugadores",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Plantilla del equipo"
+    ]
+  },
+  {
+    "role": "capitan",
+    "route": "/equipos/1/jugadores",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Plantilla del equipo"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Carlos Mena"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Bienvenido, Carlos Mena"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mesa del árbitro"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mesa del árbitro"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos/1",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mesa del partido"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos/1",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Mesa del partido"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos/1/estadisticas",
+    "width": 1440,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Registro de estadísticas individuales por partido"
+    ]
+  },
+  {
+    "role": "arbitro",
+    "route": "/arbitro/partidos/1/estadisticas",
+    "width": 360,
+    "overflow": false,
+    "alerts": [
+      ""
+    ],
+    "heading": [
+      "Registro de estadísticas individuales por partido"
+    ]
+  }
+]
