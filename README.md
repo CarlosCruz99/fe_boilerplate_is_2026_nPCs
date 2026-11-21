@@ -1,37 +1,46 @@
-# nPCs - Frontend de la plataforma de gestión deportiva (Liga amateur)
+# nPCs — Frontend de la plataforma de gestión deportiva
 
-Proyecto 5 · Ingeniería de Software · UCA · Ciclo 02/2026.
+**Proyecto 5 · Ingeniería de Software · UCA · Ciclo 02/2026.**
 
-Este repositorio contiene la interfaz web creada con Next.js App Router y React. Permite a aficionados consultar marcadores y posiciones; a jugadores y capitanes registrarse, inscribir equipos y consultar datos propios; a árbitros registrar encuentros; y a organizadores gestionar calendario, inscripciones, cuotas, contenido y reportes.
+Interfaz web de la liga amateur nPCs, desarrollada con Next.js App Router y React. Permite consultar partidos y posiciones sin sesión, y ofrece módulos para jugadores, capitanes, árbitros y organizadores.
 
-## Documentación consolidada
+## Accesos públicos
 
-La documentación completa del sistema se encuentra en el [README del backend](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/blob/develop/README.md) y en su [carpeta `docs`](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/tree/develop/docs): guía de uso, arquitectura, datos, API, instalación, despliegue, forma de trabajo, historias y problemas conocidos. **Publicar estos enlaces contra `main` después de la release.**
+| Recurso | URL |
+|---|---|
+| Frontend | [nPCs — Iniciar sesión](https://project-czgs9.vercel.app/login) |
+| Documentación de la API | [Swagger de producción](https://be-boilerplate-is-2026-npcs.onrender.com/api/docs) |
+| Backend | [Repositorio GitHub](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs) |
 
-La documentación de diseños frontend y capturas existente en este repositorio debe conservarse en [`docs/`](docs/). Ejemplos: `FE-1.1.md`, `FE-2.1.md`, `FE-13.1.md`, `FE-14.1-historial-pagos.md`, `FE-25.1.md`, `refactor-matchday.md` y [`docs/evidence/`](docs/evidence/).
+## Funcionalidades
 
-## Stack
+- **Aficionado:** consulta de partidos, resultados y tabla de posiciones.
+- **Jugador:** registro de cuenta, vinculación de ficha, estadísticas, calendario, galería y avisos propios.
+- **Capitán:** registro de equipo y plantilla, consulta de próximos rivales, registro de comprobantes e historial de pagos. La capitanía depende del equipo, no es un rol separado en la base de datos.
+- **Árbitro:** mesa operativa, inicio de partido, registro de marcador, faltas, participantes y estadísticas, y finalización.
+- **Organizador:** validación de inscripciones, programación y publicación de jornadas, asignación de árbitros, cuotas, verificación de pagos, galería, corrección oficial y reportes.
 
-- Next.js `16.3.6`, React `19.2.8`, TypeScript 5, Tailwind CSS 4.
-- Server Actions en `app/actions/`, rutas en `app/`, componentes compartidos en `components/`, sesión en `contexts/auth-context.tsx`, clientes y validación en `lib/`.
-- Vitest 5 y Testing Library para pruebas automatizadas.
+## Stack y estructura
 
-## Instalación local
+- Next.js 16, React 19, TypeScript y Tailwind CSS 4.
+- Rutas y vistas en `app/`, acciones de servidor en `app/actions/`.
+- Componentes reutilizables en `components/`; contexto de sesión en `contexts/`; utilidades y clientes API en `lib/`.
+- Pruebas de frontend en `tests/` y materiales de diseño en `docs/` con capturas en `docs/evidence/`.
+
+## Ejecución local
+
+Requiere Node.js y npm. Crear `.env.local` a partir del ejemplo del repositorio. El backend debe encontrarse accesible en la dirección configurada como `API_URL`.
 
 ```bash
-cp .env.example .env.local
-# Completar API_URL con la URL alcanzable de la API (por ejemplo http://localhost:3000)
 npm ci
-npm run dev
+cp .env.example .env.local
+# Configurar API_URL=http://localhost:3000 para un backend local
+npm run dev -- -p 3001
 ```
 
-Abrir `http://localhost:3000` si Next.js usa el puerto predeterminado. **Importante:** el backend Docker también publica el puerto `3000`; si ambos se ejecutan en la misma máquina, asignar otro puerto al frontend, por ejemplo `npm run dev -- -p 3001`, y revisar las URLs de integración.
+La interfaz local queda disponible en `http://localhost:3001` y la API NestJS puede utilizar `http://localhost:3000`. Para producción, el origen del backend es `https://be-boilerplate-is-2026-npcs.onrender.com`.
 
-## Variables de entorno
-
-`API_URL`: dirección base del backend utilizada por las acciones de servidor. La plantilla original contiene `http://localhost:8000`, mientras que el Compose del backend publica por defecto `3000`; ajustar al entorno real. No guardar tokens, contraseñas ni secretos de producción en el repositorio.
-
-## Pruebas
+## Pruebas y compilación
 
 ```bash
 npm test
@@ -39,22 +48,17 @@ npm run lint
 npm run build
 ```
 
-El repositorio contiene pruebas en `tests/` y evidencias visuales de vistas en `docs/evidence/`.
+## Documentación central
 
-## Ambientes y release
+La documentación del sistema se mantiene en el [README del backend](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/blob/main/README.md) y sus [páginas generales](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/tree/main/docs): guía de uso, arquitectura, modelo de datos, contratos de API, instalación, despliegue, forma de trabajo, historias y consideraciones operativas.
 
-- **Frontend público:** pendiente de URL definitiva.
-- **Documentación API pública:** pendiente de URL definitiva.
-- **Rama de integración consultada:** `develop`.
-- **Entrega:** fusionar la release aprobada a `main`, etiquetar `v1.0.0` y confirmar HTTPS y las URLs publicadas.
+Los documentos de diseño del frontend y sus capturas de pantalla están organizados en `docs/`.
 
-## Integrantes y responsabilidades
+## Equipo
 
 - Carlos Humberto Cruz Parada — Backend.
-- Diego Benjamin Hurtado Ramos — Frontend.
+- Diego Benjamín Hurtado Ramos — Frontend.
 - José Martín Luna Ramos — Frontend.
 - Francisco Javier Martínez Donado — QA.
 - Cristofer Enoc Melara Aldana — Documentación / Backend.
 - Edson Enrique Palacios Quinteros — Base de datos.
-
-**Nota:** estas funciones proceden del README actual del backend; la responsabilidad efectiva de historias y tareas se detalla en el documento de historias/Jira.
