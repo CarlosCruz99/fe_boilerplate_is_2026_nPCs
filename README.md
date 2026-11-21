@@ -1,60 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nPCs - Frontend de la plataforma de gestión deportiva (Liga amateur)
 
-## Getting Started
+Proyecto 5 · Ingeniería de Software · UCA · Ciclo 02/2026.
 
-First, run the development server:
+Este repositorio contiene la interfaz web creada con Next.js App Router y React. Permite a aficionados consultar marcadores y posiciones; a jugadores y capitanes registrarse, inscribir equipos y consultar datos propios; a árbitros registrar encuentros; y a organizadores gestionar calendario, inscripciones, cuotas, contenido y reportes.
+
+## Documentación consolidada
+
+La documentación completa del sistema se encuentra en el [README del backend](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/blob/develop/README.md) y en su [carpeta `docs`](https://github.com/CarlosCruz99/be_boilerplate_is_2026_nPCs/tree/develop/docs): guía de uso, arquitectura, datos, API, instalación, despliegue, forma de trabajo, historias y problemas conocidos. **Publicar estos enlaces contra `main` después de la release.**
+
+La documentación de diseños frontend y capturas existente en este repositorio debe conservarse en [`docs/`](docs/). Ejemplos: `FE-1.1.md`, `FE-2.1.md`, `FE-13.1.md`, `FE-14.1-historial-pagos.md`, `FE-25.1.md`, `refactor-matchday.md` y [`docs/evidence/`](docs/evidence/).
+
+## Stack
+
+- Next.js `16.3.6`, React `19.2.8`, TypeScript 5, Tailwind CSS 4.
+- Server Actions en `app/actions/`, rutas en `app/`, componentes compartidos en `components/`, sesión en `contexts/auth-context.tsx`, clientes y validación en `lib/`.
+- Vitest 5 y Testing Library para pruebas automatizadas.
+
+## Instalación local
 
 ```bash
+cp .env.example .env.local
+# Completar API_URL con la URL alcanzable de la API (por ejemplo http://localhost:3000)
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir `http://localhost:3000` si Next.js usa el puerto predeterminado. **Importante:** el backend Docker también publica el puerto `3000`; si ambos se ejecutan en la misma máquina, asignar otro puerto al frontend, por ejemplo `npm run dev -- -p 3001`, y revisar las URLs de integración.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables de entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`API_URL`: dirección base del backend utilizada por las acciones de servidor. La plantilla original contiene `http://localhost:8000`, mientras que el Compose del backend publica por defecto `3000`; ajustar al entorno real. No guardar tokens, contraseñas ni secretos de producción en el repositorio.
 
-## Learn More
+## Pruebas
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm test
+npm run lint
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+El repositorio contiene pruebas en `tests/` y evidencias visuales de vistas en `docs/evidence/`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Ambientes y release
 
-## Deploy on Vercel
+- **Frontend público:** pendiente de URL definitiva.
+- **Documentación API pública:** pendiente de URL definitiva.
+- **Rama de integración consultada:** `develop`.
+- **Entrega:** fusionar la release aprobada a `main`, etiquetar `v1.0.0` y confirmar HTTPS y las URLs publicadas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Integrantes y responsabilidades
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Carlos Humberto Cruz Parada — Backend.
+- Diego Benjamin Hurtado Ramos — Frontend.
+- José Martín Luna Ramos — Frontend.
+- Francisco Javier Martínez Donado — QA.
+- Cristofer Enoc Melara Aldana — Documentación / Backend.
+- Edson Enrique Palacios Quinteros — Base de datos.
 
-## Registro de pagos H13
-
-La pantalla del capitán está en `/equipo/cuotas`.
-Contrato, validaciones y resultados de pruebas: [FE-13.1](docs/FE-13.1.md).
-
-## Publicación de galería H17
-
-Desde el calendario del organizador, **Subir contenido** abre el formulario de
-fotos/videos por partido. Contrato, límites, reintentos y evidencias:
-[FE-17.1](docs/FE-17.1.md).
-
-## Asignación de árbitro H25
-
-El organizador puede cambiar el árbitro de un partido programado desde su detalle
-en el calendario. Contrato y resultados de QA: [FE-25.1](docs/FE-25.1.md).
-
-## Diseño inmersivo de fútbol
-
-Login, registro y herramientas de la liga comparten el diseño Matchday: escenarios originales de estadio, transiciones y movimiento con pausa accesible. Cambios, corrección de la mesa del árbitro y evidencia de validación: [refactor Matchday](docs/refactor-matchday.md).
-
-## Rendimiento y calendario por tarjetas
-
-El calendario sigue la referencia de tarjetas, con selección de jornadas, fondos fotográficos reales y video de entrenamiento bajo demanda. Mediciones antes/después, fuentes y validación: [optimización del calendario](docs/optimizacion-calendario.md).
+**Nota:** estas funciones proceden del README actual del backend; la responsabilidad efectiva de historias y tareas se detalla en el documento de historias/Jira.
